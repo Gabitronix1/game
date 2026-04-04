@@ -1,0 +1,60 @@
+{
+  "name": "GameProgress",
+  "type": "object",
+  "properties": {
+    "current_scene": {
+      "type": "string",
+      "description": "Current scene ID in the story"
+    },
+    "choices_made": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of choice IDs the player has made"
+    },
+    "emotional_state": {
+      "type": "object",
+      "properties": {
+        "miedo": {
+          "type": "number"
+        },
+        "ira": {
+          "type": "number"
+        },
+        "patriotismo": {
+          "type": "number"
+        },
+        "incertidumbre": {
+          "type": "number"
+        },
+        "perdida": {
+          "type": "number"
+        }
+      },
+      "description": "Emotional state tracking"
+    },
+    "character_name": {
+      "type": "string",
+      "description": "Player character name"
+    },
+    "is_completed": {
+      "type": "boolean",
+      "description": "Whether the story is completed"
+    },
+    "ending_type": {
+      "type": "string",
+      "enum": [
+        "supervivencia",
+        "heroismo",
+        "desercion",
+        "sacrificio",
+        "tragedia"
+      ],
+      "description": "Type of ending reached"
+    }
+  },
+  "required": [
+    "current_scene"
+  ]
+}

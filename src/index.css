@@ -1,0 +1,132 @@
+@import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Special+Elite&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 30 10% 8%;
+    --foreground: 40 20% 85%;
+    --card: 30 10% 11%;
+    --card-foreground: 40 20% 85%;
+    --popover: 30 10% 11%;
+    --popover-foreground: 40 20% 85%;
+    --primary: 38 60% 50%;
+    --primary-foreground: 30 10% 8%;
+    --secondary: 30 8% 18%;
+    --secondary-foreground: 40 20% 80%;
+    --muted: 30 8% 15%;
+    --muted-foreground: 30 10% 50%;
+    --accent: 0 50% 40%;
+    --accent-foreground: 40 20% 90%;
+    --destructive: 0 70% 45%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 30 10% 20%;
+    --input: 30 10% 20%;
+    --ring: 38 60% 50%;
+    --chart-1: 38 60% 50%;
+    --chart-2: 120 20% 35%;
+    --chart-3: 0 50% 40%;
+    --chart-4: 200 15% 40%;
+    --chart-5: 30 40% 45%;
+    --radius: 0.5rem;
+    --sidebar-background: 30 10% 8%;
+    --sidebar-foreground: 40 20% 85%;
+    --sidebar-primary: 38 60% 50%;
+    --sidebar-primary-foreground: 30 10% 8%;
+    --sidebar-accent: 30 8% 18%;
+    --sidebar-accent-foreground: 40 20% 80%;
+    --sidebar-border: 30 10% 20%;
+    --sidebar-ring: 38 60% 50%;
+
+    --font-special: 'Special Elite', cursive;
+    --font-fell: 'IM Fell English', serif;
+    --font-inter: 'Inter', sans-serif;
+  }
+
+  .dark {
+    --background: 30 10% 5%;
+    --foreground: 40 20% 85%;
+    --card: 30 10% 8%;
+    --card-foreground: 40 20% 85%;
+    --popover: 30 10% 8%;
+    --popover-foreground: 40 20% 85%;
+    --primary: 38 60% 50%;
+    --primary-foreground: 30 10% 5%;
+    --secondary: 30 8% 15%;
+    --secondary-foreground: 40 20% 80%;
+    --muted: 30 8% 12%;
+    --muted-foreground: 30 10% 50%;
+    --accent: 0 50% 40%;
+    --accent-foreground: 40 20% 90%;
+    --destructive: 0 70% 45%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 30 10% 16%;
+    --input: 30 10% 16%;
+    --ring: 38 60% 50%;
+    --chart-1: 38 60% 50%;
+    --chart-2: 120 20% 35%;
+    --chart-3: 0 50% 40%;
+    --chart-4: 200 15% 40%;
+    --chart-5: 30 40% 45%;
+    --sidebar-background: 30 10% 5%;
+    --sidebar-foreground: 40 20% 85%;
+    --sidebar-primary: 38 60% 50%;
+    --sidebar-primary-foreground: 30 10% 5%;
+    --sidebar-accent: 30 8% 15%;
+    --sidebar-accent-foreground: 40 20% 80%;
+    --sidebar-border: 30 10% 16%;
+    --sidebar-ring: 38 60% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@keyframes typewriter {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.85; }
+  25% { opacity: 0.95; }
+  75% { opacity: 0.9; }
+}
+
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-1%, -1%); }
+  20% { transform: translate(1%, 0%); }
+  30% { transform: translate(-1%, 1%); }
+  40% { transform: translate(1%, -1%); }
+  50% { transform: translate(-1%, 0%); }
+  60% { transform: translate(1%, 1%); }
+  70% { transform: translate(0%, -1%); }
+  80% { transform: translate(-1%, 1%); }
+  90% { transform: translate(1%, 0%); }
+}
+
+.animate-typewriter > * {
+  animation: typewriter 0.5s ease forwards;
+  opacity: 0;
+}
+
+.film-grain::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  animation: grain 0.5s steps(1) infinite;
+  z-index: 50;
+}
