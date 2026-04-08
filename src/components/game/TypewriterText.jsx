@@ -1,29 +1,44 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 
-export default function TypewriterText({ text, speed = 15, onComplete }) {
+function getCharDelay(char, baseSpeed) {
+  if (char === '.' || char === '!' || char === '?') return baseSpeed * 18;
+  if (char === ',' || char === ';' || char === ':') return baseSpeed * 8;
+  if (char === '—' || char === '…') return baseSpeed * 14;
+  if (char === '\n') return baseSpeed * 10;
+  return baseSpeed;
+}
+
+export default function TypewriterText({ text, baseSpeed = 15, onComplete }) {
   const [displayedText, setDisplayedText] = useState("");
   const [isComplete, setIsComplete] = useState(false);
+  const timeoutRef = useRef(null);
+  const indexRef = useRef(0);
 
   useEffect(() => {
     setDisplayedText("");
     setIsComplete(false);
-    let index = 0;
-    const interval = setInterval(() => {
-      if (index < text.length) {
-        setDisplayedText(text.slice(0, index + 1));
-        index++;
-      } else {
+    indexRef.current = 0;
+
+    const typeNext = () => {
+      const i = indexRef.current;
+      if (i >= text.length) {
         setIsComplete(true);
         onComplete?.();
-        clearInterval(interval);
+        return;
       }
-    }, speed);
+      setDisplayedText(text.slice(0, i + 1));
+      indexRef.current = i + 1;
+      const delay = getCharDelay(text[i], baseSpeed);
+      timeoutRef.current = setTimeout(typeNext, delay);
+    };
 
-    return () => clearInterval(interval);
-  }, [text, speed]);
+    timeoutRef.current = setTimeout(typeNext, baseSpeed);
+    return () => clearTimeout(timeoutRef.current);
+  }, [text, baseSpeed]);
 
   const skipToEnd = () => {
+    clearTimeout(timeoutRef.current);
     setDisplayedText(text);
     setIsComplete(true);
     onComplete?.();
