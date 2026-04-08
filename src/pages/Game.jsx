@@ -21,6 +21,22 @@ export default function Game() {
 
   const currentScene = scenes[currentSceneId];
 
+  const ATMOSPHERE_SPEED = {
+    horror:        6,
+    violence:      7,
+    chaos:         7,
+    tension:       9,
+    moral_dilemma: 10,
+    intense:       10,
+    despair:       14,
+    melancholy:    16,
+    intimate:      16,
+    bittersweet:   15,
+    stealth:       11,
+    somber:        14,
+  };
+  const baseSpeed = ATMOSPHERE_SPEED[currentScene?.atmosphere] ?? 12;
+
   const applyEmotionShift = useCallback((shift) => {
     if (!shift) return;
     setEmotions((prev) => {
@@ -112,7 +128,7 @@ export default function Game() {
             <div className="mb-6">
               <TypewriterText
                 text={currentScene.narrative}
-                speed={12}
+                baseSpeed={baseSpeed}
                 onComplete={() => setTextComplete(true)}
               />
             </div>
