@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { scenes, INITIAL_EMOTIONS } from "../lib/storyData";
+import { scenes, INITIAL_EMOTIONS, isChoiceLocked } from "../lib/storyData";
 import SceneHeader from "../components/game/SceneHeader";
 import TypewriterText from "../components/game/TypewriterText";
 import ChoiceButton from "../components/game/ChoiceButton";
@@ -171,6 +171,8 @@ export default function Game() {
                     index={i}
                     onSelect={handleChoice}
                     disabled={transitioning}
+                    locked={isChoiceLocked(choice, emotions)}
+                    lockedMessage={choice.lockedMessage}
                   />
                 ))}
               </motion.div>
