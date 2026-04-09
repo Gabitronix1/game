@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { scenes, INITIAL_EMOTIONS, isChoiceLocked } from "../lib/storyData";
+import { CHOICE_FLAGS, SCENE_INJECTIONS } from "../lib/narrativeMemory";
 import SceneHeader from "../components/game/SceneHeader";
 import TypewriterText from "../components/game/TypewriterText";
 import ChoiceButton from "../components/game/ChoiceButton";
@@ -15,11 +16,22 @@ export default function Game() {
   const [currentSceneId, setCurrentSceneId] = useState("intro");
   const [emotions, setEmotions] = useState({ ...INITIAL_EMOTIONS });
   const [choicesMade, setChoicesMade] = useState([]);
+  const [narrativeFlags, setNarrativeFlags] = useState({});
   const [textComplete, setTextComplete] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const [transitioning, setTransitioning] = useState(false);
 
   const currentScene = scenes[currentSceneId];
+
+  // Construir narrativa con inyecciones de memoria
+  const buildNarrative = (scene) => {
+    const injections = SCENE_INJECTIONS[scene.id] || [];
+    const extras = injections
+      .filter(({ flag }) => narrativeFlags[flag])
+      .map(({ text }) => text)
+      .join("");
+    return scene.narrative + extras;
+  };
 
   const ATMOSPHERE_SPEED = {
     horror:        6,
@@ -53,6 +65,10 @@ export default function Game() {
       if (transitioning) return;
       setTransitioning(true);
       setChoicesMade((prev) => [...prev, choice.id]);
+      // Activar flag de memoria narrativa si la elección lo tiene
+      if (CHOICE_FLAGS[choice.id]) {
+        setNarrativeFlags((prev) => ({ ...prev, [CHOICE_FLAGS[choice.id]]: true }));
+      }
 
       // Apply scene emotion shift
       applyEmotionShift(currentScene.emotionShift);
@@ -73,6 +89,7 @@ export default function Game() {
     setCurrentSceneId("intro");
     setEmotions({ ...INITIAL_EMOTIONS });
     setChoicesMade([]);
+    setNarrativeFlags({});
     setTextComplete(false);
     setShowHistory(false);
   };
@@ -127,7 +144,7 @@ export default function Game() {
             {/* Narrative Text */}
             <div className="mb-6">
               <TypewriterText
-                text={currentScene.narrative}
+                text={buildNarrative(currentScene)}
                 baseSpeed={baseSpeed}
                 onComplete={() => setTextComplete(true)}
               />
