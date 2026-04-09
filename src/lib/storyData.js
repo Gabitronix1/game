@@ -54,14 +54,12 @@ Tu madre empieza a llorar sin hacer ruido. Solo se le mueven los hombros.
 
 El sobre sigue ahí. Lo tienes que abrir tú.`,
     historicalNote: "El 1 de septiembre de 1939 Alemania invadió Polonia. En las semanas siguientes, más de un millón de jóvenes alemanes recibieron su convocatoria militar. Para muchos fue la última vez que verían a sus familias.",
-    // El sobre mismo ya genera miedo e incertidumbre notables
     emotionShift: { miedo: 15, incertidumbre: 15, patriotismo: 5, perdida: 5 },
     choices: [
       {
         id: "accept_proud",
         text: "Abrir el sobre con calma y decir: \"Es mi deber. Alemania me necesita.\"",
         subtext: "Fritz te mira con admiración. Pero tu padre cierra los ojos.",
-        // Solo disponible si el miedo no ha superado a la convicción
         emotionRequires: { miedo: { max: 60 } },
         lockedMessage: "El miedo te aprieta la garganta. Las palabras de orgullo no salen.",
         emotionShift: { patriotismo: 25, ira: 5, miedo: -10, incertidumbre: -5 },
@@ -284,6 +282,8 @@ Vigilar. La palabra parece inocente. No lo es.
 
 Uno de los hombres del brazalete amarillo cae de rodillas al tercer intento de cargar una pala — tiene más de sesenta años. El soldado a tu lado lo levanta de una patada.
 
+{{inject}}
+
 Hans mira al suelo. Werner aprieta la mandíbula. Tú sientes que algo dentro de ti se mueve, como una placa tectónica que empezara a agrietarse.
 
 Nadie ha dado la orden de pegarle. Pero nadie ha dado la orden de no hacerlo.
@@ -296,7 +296,6 @@ El anciano te mira. Sus ojos no piden ayuda — hace tiempo que aprendió que pe
         id: "intervene_quietly",
         text: "Acercarte al anciano y ayudarle a levantar la pala — sin hacer ruido, sin llamar la atención.",
         subtext: "No es un gesto heroico. Es lo mínimo que puedes hacer siendo humano.",
-        // Si la ira es muy alta, reaccionas de forma brusca en vez de sutil
         emotionRequires: { ira: { max: 50 } },
         lockedMessage: "Estás demasiado tenso. Cada músculo te pide reaccionar, no actuar con calma.",
         emotionShift: { incertidumbre: 10, perdida: 5, patriotismo: -15, ira: -5 },
@@ -313,7 +312,6 @@ El anciano te mira. Sus ojos no piden ayuda — hace tiempo que aprendió que pe
         id: "tell_werner",
         text: "Esa noche, decirle a Werner lo que sentiste — necesitas entender qué acaba de pasar.",
         subtext: "Werner tiene más palabras que tú para lo que estáis viendo.",
-        // Solo si la incertidumbre ya te pesa suficiente para buscar respuestas
         emotionRequires: { incertidumbre: { min: 30 } },
         lockedMessage: "Aún no tienes palabras para lo que sientes. Ni siquiera sabes qué preguntarle.",
         emotionShift: { incertidumbre: 20, perdida: 10, miedo: 10, patriotismo: -10 },
@@ -387,6 +385,8 @@ Brandt te señala: "Müller. Escuadrón Gamma. Elimina esa resistencia. Ahora."
 
 Tu primera orden de combate real. El corazón no late — golpea, como si quisiera salirse del pecho.
 
+{{inject}}
+
 Hans te toca el hombro: "Juntos."
 
 Werner no dice nada pero está a tu izquierda, con el fusil levantado, pálido como la cal.
@@ -408,7 +408,6 @@ Hay tres opciones delante de ti y tienes quince segundos para elegir.`,
         id: "shout_surrender",
         text: "Gritar en francés antes de atacar — darles la oportunidad de rendirse.",
         subtext: "Tu francés del colegio es terrible. Pero es un intento.",
-        // Si la ira es muy alta, no puedes contenerte para negociar
         emotionRequires: { ira: { max: 60 } },
         lockedMessage: "La rabia te ciega. No puedes formular palabras de paz cuando todo en ti quiere atacar.",
         emotionShift: { incertidumbre: 15, miedo: 10, perdida: -5, ira: -10 },
@@ -484,7 +483,7 @@ Hay un muerto entre los tuyos: Friedrich, un chico de Dresde cuyo nombre no hab�
     year: "Mayo, 1940",
     location: "Plaza del pueblo, Ardenas",
     atmosphere: "tension",
-    narrative: `"Rendez-vous! La guerre est perdue! Vous serez traités avec respect!"
+    narrative: `"Rendez-vous! La guerre est finie! Vous serez traités avec respect!"
 
 Tu francés del colegio suena ridículo. Werner, detrás de ti, te corrige en voz baja: "Finie, no perdue. Perdue suena raro."
 
@@ -586,6 +585,8 @@ Werner y tú os sentáis fuera, en los peldaños de la entrada, mirando el cielo
 
 "¿Sabes lo que me preguntó hoy el sargento Kessler?" dice Werner. "Me preguntó qué era más importante: la disciplina o la conciencia. Le dije que la pregunta no tendría sentido si hubiera suficiente disciplina. Me miró raro."
 
+{{inject}}
+
 Se queda en silencio. Luego:
 
 "¿Crees que hay alguna forma de hacer esto sin perder algo que no se recupera?"
@@ -635,6 +636,8 @@ Brandt está eufórico. "¡Seis semanas! ¡Hemos conquistado Francia en seis sem
 
 Hans silba. Werner mira la arquitectura con los ojos muy abiertos, como un turista en el momento más equivocado.
 
+{{inject}}
+
 Esa noche, en un restaurante requisado donde bebéis Bordeaux robado, Brandt recibe un mensaje y lo lee dos veces. Luego lo dobla con cuidado y os mira.
 
 "Nuevas órdenes. Rusia."
@@ -651,7 +654,6 @@ Nadie bebe más. Nadie habla. Hans mira su copa durante un rato muy largo y lueg
         id: "volunteer_east_pride",
         text: "\"Si hay que ir al este, iremos al este. Donde manden.\" — Lo dices en serio.",
         subtext: "El patriotismo, decides, no puede ser condicional. O lo eres o no lo eres.",
-        // Solo disponible si el patriotismo aún es suficiente como convicción
         emotionRequires: { patriotismo: { min: 25 } },
         lockedMessage: "Abres la boca para decirlo, pero las palabras no salen. Ya no crees en eso.",
         emotionShift: { patriotismo: 20, ira: 10, miedo: -5 },
@@ -690,6 +692,8 @@ Tu compañía cruzó la frontera soviética en junio con 180 hombres y canciones
 
 Cuarenta y dos grados bajo cero. El aceite del fusil se congela. Los pies ennegrecen. Para cuando lo notas, ya no sientes nada, y eso es peor.
 
+{{inject}}
+
 Werner perdió dos dedos del pie izquierdo hace tres semanas. Camina con una cojera que no tenía y ya no habla de filosofía — ahora cuenta los pasos entre un lugar con techo y el siguiente.
 
 Hans tose de una forma que reconoces. El mismo sonido que hacía Friedrich antes de morir en aquel pueblo francés. Lo sabes pero no lo dices.
@@ -720,7 +724,6 @@ Brandt lo mira durante un segundo. "Lo que haga falta."`,
         id: "break_down_alone",
         text: "Una noche, apartarte solo y dejar que te vengan abajo — necesitas llorar aunque sea una vez.",
         subtext: "Los hombres no lloran. Pero eso es mentira, y lo sabes.",
-        // Solo si la pérdida ya es insostenible
         emotionRequires: { perdida: { min: 45 } },
         lockedMessage: "Quieres hacerlo. Pero no puedes aún. Algo dentro todavía resiste, todavía endurece.",
         emotionShift: { perdida: 25, incertidumbre: 20, miedo: -15 },
@@ -743,13 +746,15 @@ Brandt lo mira durante un segundo. "Lo que haga falta."`,
 
 Pero otro grupo ya está aquí.
 
-Son SS. Waffen-SS, identificables por las rúnicas en el cuello. Su oficial — un Hauptsturmführer con la mandíbula cuadrada y ojos que no parpadean— habla con Brandt apartados del grupo.
+Son SS. Waffen-SS, identificables por las rúnicas en el cuello. Su oficial — un Hauptsturmführer con la mandíbula cuadrada y ojos que no parpadean — habla con Brandt apartados del grupo.
 
 Werner te agarra del brazo. Señala con la mirada: en la plaza del pueblo, los habitantes han sido congregados. Hombres, mujeres, niños. Ancianos que apenas pueden estar de pie. Todos con el mismo miedo que aprendiste a reconocer en el campo de entrenamiento.
 
 El SS Hauptsturmführer vuelve a caminar hacia sus hombres. Escucháis algo que no queréis haber escuchado: la orden.
 
 "Colaboradores del enemigo. Ejecutad."
+
+{{inject}}
 
 Hans te agarra la muñeca. Sus dedos, siempre tan cálidos, están fríos.
 
@@ -763,8 +768,6 @@ Tú tienes diez segundos.`,
         id: "intervene_atrocity",
         text: "Ponerte delante — plantar los pies entre los SS y los civiles.",
         subtext: "No tienes autoridad para esto. No tienes el rango. No tienes ninguna razón práctica. Pero tienes las palabras de tu padre: 'no te conviertas en un monstruo.'",
-        // Solo si has perdido suficiente como para no tener nada que demostrarle al sistema
-        // Y si el miedo no es tan paralizante que impida el gesto físico
         emotionRequires: { perdida: { min: 40 }, miedo: { max: 85 } },
         lockedMessage: "Tu cuerpo no responde. Las piernas no se mueven. Has visto demasiado y ya no sabes si eres el tipo de hombre que hace esto.",
         emotionShift: { miedo: 35, ira: 15, incertidumbre: -15, perdida: -10, patriotismo: -25 },
@@ -836,7 +839,7 @@ Esa noche, Brandt te llama aparte: "Lo que pasó hoy no pasó. ¿Me entiendes, M
   watch_aftermath: {
     id: "watch_aftermath",
     chapter: "Capítulo V",
-    title: "Lo Que No Puedes Desoir",
+    title: "Lo Que No Puedes Desoír",
     year: "Enero, 1942",
     location: "Pueblo soviético",
     atmosphere: "horror",
@@ -856,7 +859,9 @@ Esa noche no duermes. No es una metáfora. Literalmente, durante las seis horas 
 
 Werner te escribe una nota a la mañana siguiente, en un papel diminuto: "Lo que no paramos es igual de nuestro que lo que hicieron. Eso es lo que significa ser testigo."
 
-Guardas la nota. No respondes. No tienes respuesta.`,
+Guardas la nota. No respondes. No tienes respuesta.
+
+{{inject}}`,
     historicalNote: "La psicología moral denomina 'daño moral' al sufrimiento causado por participar en, o no impedir, actos que violan los propios valores éticos. Los veteranos de la Segunda Guerra Mundial sufrieron altísimas tasas de este tipo de trauma, muchas veces en silencio.",
     emotionShift: { perdida: 45, incertidumbre: 20, ira: 20, miedo: 15, patriotismo: -30 },
     choices: [
@@ -895,6 +900,8 @@ Los soviéticos son distintos a los franceses. No retroceden. No se rinden. Cont
 
 El nuevo comandante de vuestra unidad es el Hauptmann Steiner — SS, Cruz de Caballero, ojos como rendijas. Brandt fue evacuado con metralla en la pierna. Lo echas de menos más de lo que creías posible.
 
+{{inject}}
+
 Hans ya no tose — ahora tiene fiebre alta y se arrastra. Werner ha perdido el libro de Heidegger en algún asalto y a veces mira el suelo donde debería estar como si hubiera perdido algo más importante que un libro.
 
 Tú llevas semanas sin dormir más de dos horas seguidas. Los sueños —cuando llegan— no son mejores que la vigilia.
@@ -915,7 +922,6 @@ Tú miras las ruinas de Stalingrado a tu alrededor y piensas en la carpintería 
         id: "plan_breakout",
         text: "Proponer a Werner una fuga — de noche, por el flanco suroeste, mientras queda tiempo.",
         subtext: "Deserción. Pelotón de fusilamiento si te cogen los alemanes. Campo de prisioneros si te cogen los rusos. Pero quizás la única salida real.",
-        // Solo si el miedo ya es suficientemente alto como para considerar algo tan extremo
         emotionRequires: { miedo: { min: 60 } },
         lockedMessage: "Aún no estás lo bastante desesperado como para pensar en desertar. Una parte de ti todavía confía.",
         emotionShift: { miedo: 20, incertidumbre: 20, perdida: 5 },
@@ -950,6 +956,8 @@ Tú miras las ruinas de Stalingrado a tu alrededor y piensas en la carpintería 
 Hans tiene treinta y ocho de fiebre. Lo habéis instalado en el rincón más caliente del sótano —que no es nada caliente— con mantas robadas de los muertos. Cuando está consciente habla de su panadería. "Las medialunas con mantequilla", dice, "tienen que dorar por los bordes, Karl, por los bordes, eso es lo importante."
 
 Werner cuida de él cuando tú sales a patrullar. Pero Werner también está fallando — la cojera se ha vuelto más pronunciada, la tos que tenía el mes pasado ha empeorado.
+
+{{inject}}
 
 Una mañana, mientras rebuscas entre los escombros de un edificio buscando comida o medicamentos, encuentras algo: una familia rusa escondida en un sótano. Una madre con dos niños, quizás cuatro y seis años. Esqueléticos. Aterrados. Han aprendido que el ruido puede matarlos y están en silencio absoluto.
 
@@ -1002,6 +1010,8 @@ Werner baja la mirada. "Hans no puede caminar más de cien metros."
 
 El silencio entre los dos vale por una conversación entera.
 
+{{inject}}
+
 Tenéis que decidir esa noche. Mañana Steiner realiza una inspección y si nota algo, si falta alguien...
 
 Hans se despierta y os mira con ojos febriles pero lúcidos. "Lo he oído todo", dice. Su voz es un susurro. "Id. No esperéis por mí."
@@ -1018,7 +1028,6 @@ Hay un tipo de silencio que no tiene nada que ver con la ausencia de sonido.`,
         id: "escape_leave_hans",
         text: "Aceptar lo que dice Hans y preparar la fuga — esta noche.",
         subtext: "La mayor crueldad a veces es hacer lo que alguien te pide.",
-        // Solo si la pérdida ya es tan grande que puedes aceptar perder a Hans
         emotionRequires: { perdida: { min: 55 } },
         lockedMessage: "No puedes. Físicamente no puedes dar ese paso. Tus piernas no te obedecen cuando piensas en dejarlo.",
         emotionShift: { perdida: 40, miedo: 20, incertidumbre: 10 },
@@ -1063,7 +1072,6 @@ No hay explicación para ese gesto. Solo existe.`,
         id: "trust_farmer",
         text: "Entrar — confiar en esa mujer aunque no haya ninguna razón lógica para hacerlo.",
         subtext: "Hay momentos en que la única opción es confiar en la humanidad de un extraño.",
-        // Solo si la pérdida acumulada te ha enseñado que la humanidad existe incluso en el enemigo
         emotionRequires: { perdida: { min: 60 } },
         lockedMessage: "Has visto demasiado. No puedes confiar. El miedo gana a la esperanza.",
         emotionShift: { incertidumbre: -15, miedo: -15, perdida: -10 },
@@ -1096,6 +1104,8 @@ Os rendís con las manos en alto. Los soldados soviéticos que os reciben son m�
 
 Hans murió tres noches atrás. Lo enterrasteis tú y Werner como pudisteis — en la nieve, con un trozo de madera como lápida y el nombre escrito con la bayoneta. "Hans Becker. Panadero. Hijo." No supisteis qué más poner.
 
+{{inject}}
+
 Werner camina cojeando a tu lado. Os miráis. No hay palabras para esto tampoco.
 
 La marcha hacia los campos de prisioneros comienza bajo un cielo gris que parece no tener fin.`,
@@ -1115,6 +1125,18 @@ La marcha hacia los campos de prisioneros comienza bajo un cielo gris que parece
         subtext: "Dos hombres que ya no tienen país. Solo se tienen el uno al otro.",
         emotionShift: { perdida: 15, incertidumbre: -5 },
         nextScene: "ending_sacrificio",
+      },
+      // Camino al ending_heroismo: solo accesible si el jugador
+      // intervino en atrocity_crossroads Y tiene pérdida muy alta
+      // (ha vivido suficiente para entender el peso de un gesto final)
+      {
+        id: "one_last_thing",
+        text: "Espera. Hay algo que todavía puedes hacer antes de que todo termine.",
+        subtext: "En el caos de la rendición, entre las ruinas, oyes algo. Voces de niños.",
+        emotionRequires: { perdida: { min: 70 }, patriotismo: { max: 30 } },
+        lockedMessage: "No te queda nada para dar. Solo el siguiente paso.",
+        emotionShift: { perdida: 10, miedo: -10 },
+        nextScene: "ending_heroismo",
       },
     ],
   },
@@ -1180,6 +1202,8 @@ Estabas despierto. Siempre estás despierto. Werner también.
 
 Os miráis en la oscuridad del sótano sin decir nada. Afuera, el frío de Stalingrado hace crujir las vigas del edificio como si la ciudad misma se quejara.
 
+{{inject}}
+
 Hans Becker. Panadero de Hamburgo. Tenía veintidós años. Le gustaban las medialunas con mantequilla doradas por los bordes, las historias de boxeo, y reírse demasiado fuerte en los momentos inapropiados. Hacía doce semanas que no reía así.
 
 Werner saca un trozo de madera y una bayoneta. Con manos que tiemblan —de frío, de otra cosa— empieza a grabar letras en la madera.
@@ -1196,7 +1220,7 @@ No tienes respuesta. Pero de pie en la nieve, en el frío que mataría a cualqui
 
 La segunda carta de tu madre.
 
-"Para cuando sientas que no puedes más."
+"Para cuando sientas que ya no puedes más."
 
 Nunca has sentido esto hasta ahora.`,
     historicalNote: "Decenas de miles de soldados alemanes murieron de enfermedad y congelación en el cerco de Stalingrado antes de que terminara la batalla. Sus compañeros, cuando podían, improvisaban enterramientos con lo que encontraban.",
@@ -1292,6 +1316,8 @@ Nada de lo que dejaste sigue en pie.
 
 Excepto Fritz. Excepto tú.
 
+{{inject}}
+
 Esa noche, en el apartamento pequeño de Fritz en Kreuzberg, abres la ventana y miras los tejados de Berlín bajo la lluvia de octubre. En algún lugar de la ciudad alguien toca un piano. La música sube por los patios interiores.
 
 Piensas en Hans, que olía a levadura y reía demasiado fuerte. En Werner y sus preguntas sin respuesta. En tu padre, que lo sabía todo y no pudo decirte nada que te preparara para esto.
@@ -1330,6 +1356,8 @@ El guardia viene hacia ti. Werner te mira desde el suelo con esa mirada suya de 
 "No."
 
 Lo levantas. Lo pones sobre tus hombros como aprendiste a cargar tablones de madera en la carpintería de tu padre. El guardia os mira, sopesa, y finalmente hace un gesto con el fusil: adelante.
+
+{{inject}}
 
 Así camináis. Tú cargando a Werner. Werner que va repitiendo en voz baja, como un mantra, los versos de Goethe que se sabe de memoria. "Über allen Gipfeln ist Ruh..." — Sobre todas las cimas hay paz.
 
@@ -1374,6 +1402,8 @@ La carpintería es escombros. Tu madre está viva. Tu padre, no.
 
 Reconstruyes el taller con tus manos, ladrillo a ladrillo, tabla a tabla. Le pones a cada mueble que haces las iniciales H.B. en un lugar que solo tú ves: Hans Becker, panadero de Hamburgo, que murió en un sótano de Stalingrado creyendo que tú y Werner teníais que vivir.
 
+{{inject}}
+
 No hablas de la guerra. Pero en invierno, cuando la primera nevada cubre el patio del taller, te sientas en el banco de trabajo de tu padre y te quedas en silencio durante un buen rato.
 
 No es tristeza exactamente. Es algo más difícil de nombrar — la gratitud impura de los que sobreviven cuando otros no pudieron.`,
@@ -1404,6 +1434,8 @@ Mientes con la mirada y asientes. Porque lo contrario —decirle que no, que pod
 Vuelves a Berlín en 1949. Amigdalectomía de la guerra: todo extirpado. Tu madre te reconoce pero tú tardas un momento en reconocerla a ella. Fritz ha crecido tanto que parece otro. La ciudad es un fantasma de sí misma.
 
 Reconstruyes la carpintería. Trabajas. Vives. Tienes incluso, algunos años después, algo parecido a la felicidad — una mujer, dos hijos, un jardín pequeño.
+
+{{inject}}
 
 Pero hay inviernos en que te despiertas a las tres de la mañana con la certeza exacta de cuánto pesa una decisión tomada en un segundo de miedo.
 
