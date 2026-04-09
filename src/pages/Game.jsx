@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { scenes, INITIAL_EMOTIONS, isChoiceLocked } from "../lib/storyData";
 import { CHOICE_FLAGS, buildNarrative } from "../lib/narrativeMemory";
@@ -8,6 +8,7 @@ import ChoiceButton from "../components/game/ChoiceButton";
 import HistoricalNote from "../components/game/HistoricalNote";
 import EmotionTracker from "../components/game/EmotionTracker";
 import EndingScreen from "../components/game/EndingScreen";
+import ChapterTransition from "../components/game/ChapterTransition";
 import { useNavigate } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
 
@@ -19,6 +20,13 @@ export default function Game() {
   const [narrativeFlags, setNarrativeFlags] = useState({});
   const [textComplete, setTextComplete] = useState(false);
   const [transitioning, setTransitioning] = useState(false);
+
+  // Estado de transición entre capítulos
+  const [chapterTransition, setChapterTransition] = useState(null);
+  // { chapter, year, location, nextSceneId }
+
+  // Ref para rastrear el capítulo actual y detectar cambios
+  const currentChapterRef = useRef(scenes["intro"]?.chapter);
 
   const currentScene = scenes[currentSceneId];
 
@@ -55,7 +63,7 @@ export default function Game() {
       setTransitioning(true);
       setChoicesMade((prev) => [...prev, choice.id]);
 
-      // Activar flag de memoria narrativa si la elección lo tiene
+      // Activar flag de memoria narrativa
       if (CHOICE_FLAGS[choice.id]) {
         setNarrativeFlags((prev) => ({
           ...prev,
@@ -67,15 +75,46 @@ export default function Game() {
       applyEmotionShift(currentScene.emotionShift);
       applyEmotionShift(choice.emotionShift);
 
+      const nextScene = scenes[choice.nextScene];
+      const currentChapter = currentScene.chapter;
+      const nextChapter = nextScene?.chapter;
+
+      // Detectar cambio real de capítulo
+      const isChapterChange =
+        nextChapter &&
+        nextChapter !== currentChapter &&
+        nextChapter !== currentChapterRef.current;
+
       setTimeout(() => {
-        setCurrentSceneId(choice.nextScene);
-        setTextComplete(false);
-        setTransitioning(false);
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        if (isChapterChange) {
+          currentChapterRef.current = nextChapter;
+          setChapterTransition({
+            chapter: nextChapter,
+            year: nextScene.year,
+            location: nextScene.location,
+            nextSceneId: choice.nextScene,
+          });
+          setTransitioning(false);
+        } else {
+          setCurrentSceneId(choice.nextScene);
+          setTextComplete(false);
+          setTransitioning(false);
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
       }, 600);
     },
     [currentScene, applyEmotionShift, transitioning]
   );
+
+  // Llamado cuando la transición de capítulo termina (timeout o click)
+  const handleTransitionComplete = useCallback(() => {
+    if (!chapterTransition) return;
+    const { nextSceneId } = chapterTransition;
+    setChapterTransition(null);
+    setCurrentSceneId(nextSceneId);
+    setTextComplete(false);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [chapterTransition]);
 
   const handleRestart = () => {
     setCurrentSceneId("intro");
@@ -83,6 +122,8 @@ export default function Game() {
     setChoicesMade([]);
     setNarrativeFlags({});
     setTextComplete(false);
+    setChapterTransition(null);
+    currentChapterRef.current = scenes["intro"]?.chapter;
   };
 
   if (!currentScene) {
@@ -104,11 +145,23 @@ export default function Game() {
     );
   }
 
-  // Narrativa con inyecciones de memoria aplicadas
   const narrative = buildNarrative(currentScene, narrativeFlags);
 
   return (
     <div className="min-h-screen bg-background film-grain">
+
+      {/* Pantalla de transición entre capítulos */}
+      <AnimatePresence>
+        {chapterTransition && (
+          <ChapterTransition
+            chapter={chapterTransition.chapter}
+            year={chapterTransition.year}
+            location={chapterTransition.location}
+            onComplete={handleTransitionComplete}
+          />
+        )}
+      </AnimatePresence>
+
       <div className="max-w-2xl mx-auto px-4 py-6 md:py-10">
 
         {/* Top bar */}
@@ -135,7 +188,7 @@ export default function Game() {
             {/* Cabecera de escena */}
             <SceneHeader scene={currentScene} />
 
-            {/* Texto narrativo con memoria aplicada */}
+            {/* Texto narrativo */}
             <div className="mb-6">
               <TypewriterText
                 key={currentSceneId + JSON.stringify(narrativeFlags)}
