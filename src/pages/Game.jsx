@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { scenes, INITIAL_EMOTIONS, isChoiceLocked } from "../lib/storyData";
-import { CHOICE_FLAGS, SCENE_INJECTIONS } from "../lib/narrativeMemory";
+import { CHOICE_FLAGS, buildNarrative } from "../lib/narrativeMemory";
 import SceneHeader from "../components/game/SceneHeader";
 import TypewriterText from "../components/game/TypewriterText";
 import ChoiceButton from "../components/game/ChoiceButton";
@@ -18,20 +18,9 @@ export default function Game() {
   const [choicesMade, setChoicesMade] = useState([]);
   const [narrativeFlags, setNarrativeFlags] = useState({});
   const [textComplete, setTextComplete] = useState(false);
-  const [showHistory, setShowHistory] = useState(false);
   const [transitioning, setTransitioning] = useState(false);
 
   const currentScene = scenes[currentSceneId];
-
-  // Construir narrativa con inyecciones de memoria
-  const buildNarrative = (scene) => {
-    const injections = SCENE_INJECTIONS[scene.id] || [];
-    const extras = injections
-      .filter(({ flag }) => narrativeFlags[flag])
-      .map(({ text }) => text)
-      .join("");
-    return scene.narrative + extras;
-  };
 
   const ATMOSPHERE_SPEED = {
     horror:        6,
@@ -65,14 +54,17 @@ export default function Game() {
       if (transitioning) return;
       setTransitioning(true);
       setChoicesMade((prev) => [...prev, choice.id]);
+
       // Activar flag de memoria narrativa si la elección lo tiene
       if (CHOICE_FLAGS[choice.id]) {
-        setNarrativeFlags((prev) => ({ ...prev, [CHOICE_FLAGS[choice.id]]: true }));
+        setNarrativeFlags((prev) => ({
+          ...prev,
+          [CHOICE_FLAGS[choice.id]]: true,
+        }));
       }
 
-      // Apply scene emotion shift
+      // Aplicar shifts emocionales
       applyEmotionShift(currentScene.emotionShift);
-      // Apply choice emotion shift
       applyEmotionShift(choice.emotionShift);
 
       setTimeout(() => {
@@ -91,7 +83,6 @@ export default function Game() {
     setChoicesMade([]);
     setNarrativeFlags({});
     setTextComplete(false);
-    setShowHistory(false);
   };
 
   if (!currentScene) {
@@ -102,7 +93,6 @@ export default function Game() {
     );
   }
 
-  // Ending screen
   if (currentScene.isEnding) {
     return (
       <EndingScreen
@@ -114,9 +104,13 @@ export default function Game() {
     );
   }
 
+  // Narrativa con inyecciones de memoria aplicadas
+  const narrative = buildNarrative(currentScene, narrativeFlags);
+
   return (
     <div className="min-h-screen bg-background film-grain">
       <div className="max-w-2xl mx-auto px-4 py-6 md:py-10">
+
         {/* Top bar */}
         <div className="flex items-center justify-between mb-6">
           <button
@@ -138,24 +132,25 @@ export default function Game() {
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.5 }}
           >
-            {/* Scene Header */}
+            {/* Cabecera de escena */}
             <SceneHeader scene={currentScene} />
 
-            {/* Narrative Text */}
+            {/* Texto narrativo con memoria aplicada */}
             <div className="mb-6">
               <TypewriterText
-                text={buildNarrative(currentScene)}
+                key={currentSceneId + JSON.stringify(narrativeFlags)}
+                text={narrative}
                 baseSpeed={baseSpeed}
                 onComplete={() => setTextComplete(true)}
               />
             </div>
 
-            {/* Historical Note */}
+            {/* Nota histórica */}
             {textComplete && (
               <HistoricalNote note={currentScene.historicalNote} />
             )}
 
-            {/* Emotion Tracker */}
+            {/* Rastreador emocional */}
             {textComplete && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
@@ -167,7 +162,7 @@ export default function Game() {
               </motion.div>
             )}
 
-            {/* Choices */}
+            {/* Elecciones */}
             {textComplete && currentScene.choices.length > 0 && (
               <motion.div
                 initial={{ opacity: 0 }}
@@ -195,7 +190,7 @@ export default function Game() {
               </motion.div>
             )}
 
-            {/* Scroll indicator */}
+            {/* Indicador de scroll */}
             {textComplete && (
               <motion.div
                 initial={{ opacity: 0 }}
@@ -206,6 +201,7 @@ export default function Game() {
                 <ChevronDown className="w-4 h-4 text-muted-foreground animate-bounce" />
               </motion.div>
             )}
+
           </motion.div>
         </AnimatePresence>
       </div>
