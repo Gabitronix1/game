@@ -115,7 +115,7 @@ A la mañana siguiente, en la estación, tu madre te mete dos cartas en el bolsi
         text: "Leer la primera carta de tu madre en el tren — ahora mismo.",
         subtext: "\"Karl mío, recuerda que antes de ser soldado eres mi hijo.\"",
         emotionShift: { perdida: 20, incertidumbre: 10, patriotismo: -5 },
-        nextScene: "training_barracks",
+        nextScene: "letter_first",
       },
       {
         id: "save_both_letters",
@@ -966,21 +966,21 @@ Y entonces piensas en Hans, con su fiebre, que lleva tres días sin comer casi n
         text: "Dar la lata a la madre — los niños la necesitan más.",
         subtext: "Hans te entendería. Aunque muera, te entendería.",
         emotionShift: { perdida: 25, patriotismo: -10, incertidumbre: -10 },
-        nextScene: "stalingrad_final",
+        nextScene: "hans_death",
       },
       {
         id: "keep_for_hans",
         text: "Guardar la lata para Hans — es tu amigo, y quizás esto le salve.",
         subtext: "La lealtad también tiene un precio. Todo lo tiene.",
         emotionShift: { incertidumbre: 20, ira: 5, perdida: 20 },
-        nextScene: "stalingrad_final",
+        nextScene: "hans_death",
       },
       {
         id: "split_tin",
         text: "Abrir la lata y dividirla — la mitad para los niños, la mitad para Hans.",
         subtext: "No es suficiente para nadie. Pero es lo que tienes.",
         emotionShift: { perdida: 15, incertidumbre: 15, miedo: 5 },
-        nextScene: "stalingrad_final",
+        nextScene: "hans_death",
       },
     ],
   },
@@ -1115,6 +1115,153 @@ La marcha hacia los campos de prisioneros comienza bajo un cielo gris que parece
         subtext: "Dos hombres que ya no tienen país. Solo se tienen el uno al otro.",
         emotionShift: { perdida: 15, incertidumbre: -5 },
         nextScene: "ending_sacrificio",
+      },
+    ],
+  },
+
+  // ══════════════════════════════════════════════════════════
+  // ESCENAS ESPECIALES — Carta y muerte de Hans
+  // ══════════════════════════════════════════════════════════
+
+  letter_first: {
+    id: "letter_first",
+    chapter: "Capítulo I",
+    title: "La Carta para Hoy",
+    year: "Septiembre, 1939",
+    location: "Tren a Baviera",
+    atmosphere: "intimate",
+    narrative: `El sobre es pequeño. La letra de tu madre, apretada y vertical como ella misma.
+
+"Karl mío,
+
+No sé escribir cartas bonitas, así que escribiré lo que sé.
+
+Te vi nacer en el cuarto de la derecha, en una mañana de enero con nieve. Lloraste tan fuerte que tu padre, que esperaba en la cocina, entró corriendo sin que nadie le llamara.
+
+Desde entonces no he pasado un solo día sin pensar en ti. No por miedo — bueno, sí, también por miedo. Pero sobre todo porque eres la persona que más quiero en este mundo, junto a Fritz y a tu padre, y hay pocas cosas más extrañas y más hermosas en la vida que ver crecer a alguien a quien amas.
+
+Sé que vas a tener miedo. Eso no es debilidad, Karl. El miedo significa que tienes algo que perder. Y tú tienes mucho.
+
+No te digo que seas valiente. Te digo que seas tú — el que lijaba madera al lado de tu padre hasta que se hacía de noche, el que rescató tres gatos callejeros que luego no pudo quedarse, el que todavía sube a ver a la abuela Marta aunque nunca dice nada interesante.
+
+Ese Karl es el que quiero que vuelva.
+
+La segunda carta es para cuando sientas que ya no puedes más. Sabrás cuándo.
+
+Te quiero, hijo.
+Mamá"
+
+El tren traquetea sobre las vías. Afuera, los campos se vuelven más abiertos, más vacíos. Doblas la carta con cuidado y la guardas en el bolsillo interior, contra el pecho.`,
+    historicalNote: "Millones de madres escribieron cartas similares entre 1939 y 1945. Muchas nunca fueron respondidas.",
+    emotionShift: { perdida: 15, miedo: -10, incertidumbre: -5 },
+    choices: [
+      {
+        id: "continue_to_barracks",
+        text: "Guardar la carta y mirar por la ventanilla — el paisaje ya ha cambiado.",
+        subtext: "Llevas la carta y todo lo que significa a partir de ahora.",
+        emotionShift: {},
+        nextScene: "training_barracks",
+      },
+    ],
+  },
+
+  hans_death: {
+    id: "hans_death",
+    chapter: "Capítulo VI",
+    title: "La Última Noche de Hans",
+    year: "Enero, 1943",
+    location: "Stalingrado — sótano del sector norte",
+    atmosphere: "somber",
+    narrative: `Hans muere a las cuatro de la mañana del diecinueve de enero.
+
+No hay un momento dramático. Así es como descubres que la muerte real casi nunca lo es — llega sin anuncio, sin última palabra memorable, sin música. Una respiración que se ralentiza. Luego otra. Luego silencio.
+
+Estabas despierto. Siempre estás despierto. Werner también.
+
+Os miráis en la oscuridad del sótano sin decir nada. Afuera, el frío de Stalingrado hace crujir las vigas del edificio como si la ciudad misma se quejara.
+
+Hans Becker. Panadero de Hamburgo. Tenía veintidós años. Le gustaban las medialunas con mantequilla doradas por los bordes, las historias de boxeo, y reírse demasiado fuerte en los momentos inapropiados. Hacía doce semanas que no reía así.
+
+Werner saca un trozo de madera y una bayoneta. Con manos que tiemblan —de frío, de otra cosa— empieza a grabar letras en la madera.
+
+Te la pasa a ti. Él ya ha escrito: "Hans Becker. Panadero."
+
+La bayoneta pesa de una forma diferente esta noche. Grabas las últimas palabras de la lápida con una concentración absurda, como si la precisión de cada letra fuera lo más importante del mundo, porque ahora mismo lo es.
+
+Lo enterráis en la nieve del patio, antes del amanecer, para que nadie os vea y nadie lo quite.
+
+Cuando termináis, Werner dice en voz muy baja: "¿Crees que sabe que estuvimos aquí hasta el final?"
+
+No tienes respuesta. Pero de pie en la nieve, en el frío que mataría a cualquiera sin la estupidez del instinto de supervivencia, se te viene a la cabeza algo. Un bolsillo interior. Una carta.
+
+La segunda carta de tu madre.
+
+"Para cuando sientas que no puedes más."
+
+Nunca has sentido esto hasta ahora.`,
+    historicalNote: "Decenas de miles de soldados alemanes murieron de enfermedad y congelación en el cerco de Stalingrado antes de que terminara la batalla. Sus compañeros, cuando podían, improvisaban enterramientos con lo que encontraban.",
+    emotionShift: { perdida: 45, miedo: 10, incertidumbre: 10, ira: -10 },
+    choices: [
+      {
+        id: "open_second_letter",
+        text: "Abrir la segunda carta — ahora. Tu madre sabía que llegaría este momento.",
+        subtext: "Lleva meses en tu bolsillo interior. Intacta.",
+        emotionShift: {},
+        nextScene: "letter_second",
+      },
+      {
+        id: "skip_letter_forward",
+        text: "No abrir la carta — guardas lo que queda de ella para más tarde.",
+        subtext: "Mientras esté cerrada, es una promesa que no se ha roto todavía.",
+        emotionShift: { incertidumbre: 10 },
+        nextScene: "stalingrad_final",
+      },
+    ],
+  },
+
+  letter_second: {
+    id: "letter_second",
+    chapter: "Capítulo VI",
+    title: "La Carta para Cuando No Puedas Más",
+    year: "Enero, 1943",
+    location: "Stalingrado",
+    atmosphere: "intimate",
+    narrative: `El papel lleva meses doblado. Está suave en los pliegues de tanto tiempo en el bolsillo. Lo abres con cuidado, como si pudiera romperse.
+
+La letra de tu madre. Más pequeña que en la primera carta, como si hubiera querido meter más en el mismo espacio.
+
+"Karl,
+
+Si estás leyendo esto es porque estás en el lugar más oscuro al que te ha llevado todo esto. Y no quiero que estés solo ahí.
+
+No voy a decirte que todo va a salir bien. No lo sé. Nadie lo sabe. Y me parece una crueldad decirle a alguien que sufre que no se preocupe.
+
+Lo que sí sé es esto:
+
+Tu padre llegó de su guerra con algo roto que nunca se reparó del todo. Lo he querido igual — quizás más, porque entendí que cargar con algo así y seguir levantándose cada mañana es una forma de valentía que no tiene nombre.
+
+Sea lo que sea lo que has visto, lo que has hecho o dejado de hacer — no eres lo peor de eso. Eres también el niño que lloraba cuando moría un pájaro en el jardín. Eres el que le enseñó a leer a Fritz cuando yo no tenía tiempo. Eres el que todavía guarda en la mesilla la foto de los tres juntos en el lago, del verano del 35.
+
+Esos dos no se contradicen. Eso eres tú entero.
+
+Vuelve. Por las razones que sean. Vuelve.
+
+Tu madre, que te quiere más de lo que sabe escribir."
+
+El papel tembla en tus manos. O son tus manos las que tiemblan. Ya no distingues.
+
+Afuera, Stalingrado se rinde lentamente al amanecer.
+
+Tú doblas la carta. La guardas en el bolsillo. Sigues.`,
+    historicalNote: "Investigaciones posteriores sobre el bienestar psicológico de veteranos mostraron que los lazos afectivos — cartas, fotografías, recuerdos concretos de personas amadas — eran con frecuencia el factor más determinante en la voluntad de supervivencia bajo condiciones extremas.",
+    emotionShift: { perdida: -15, miedo: -15, incertidumbre: -10 },
+    choices: [
+      {
+        id: "continue_after_letter",
+        text: "Doblar la carta. Respirar. Dar el siguiente paso.",
+        subtext: "No más. Solo el siguiente paso.",
+        emotionShift: {},
+        nextScene: "stalingrad_final",
       },
     ],
   },
