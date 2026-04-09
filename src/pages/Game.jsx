@@ -1,7 +1,10 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { scenes, INITIAL_EMOTIONS, isChoiceLocked } from "../lib/storyData";
+import { useNavigate, useLocation } from "react-router-dom";
+import { scenes, isChoiceLocked } from "../lib/storyData";
 import { CHOICE_FLAGS, buildNarrative } from "../lib/narrativeMemory";
+import { INITIAL_EMOTIONS } from "../components/game/EmotionTracker";
+import { saveGame, loadGame, unlockEnding } from "../lib/saveSystem";
 import SceneHeader from "../components/game/SceneHeader";
 import TypewriterText from "../components/game/TypewriterText";
 import ChoiceButton from "../components/game/ChoiceButton";
@@ -9,11 +12,13 @@ import HistoricalNote from "../components/game/HistoricalNote";
 import EmotionTracker from "../components/game/EmotionTracker";
 import EndingScreen from "../components/game/EndingScreen";
 import ChapterTransition from "../components/game/ChapterTransition";
-import { useNavigate } from "react-router-dom";
-import { ChevronDown } from "lucide-react";
+import PauseMenu from "../components/game/PauseMenu";
+import { ChevronDown, Menu } from "lucide-react";
 
 export default function Game() {
   const navigate = useNavigate();
+  const location = useLocation();
+
   const [currentSceneId, setCurrentSceneId] = useState("intro");
   const [emotions, setEmotions] = useState({ ...INITIAL_EMOTIONS });
   const [choicesMade, setChoicesMade] = useState([]);
@@ -21,8 +26,35 @@ export default function Game() {
   const [textComplete, setTextComplete] = useState(false);
   const [transitioning, setTransitioning] = useState(false);
   const [chapterTransition, setChapterTransition] = useState(null);
+  const [isPaused, setIsPaused] = useState(false);
 
   const currentChapterRef = useRef(scenes["intro"]?.chapter);
+
+  // Cargar partida guardada si viene del Landing con loadSave: true
+  useEffect(() => {
+    if (location.state?.loadSave) {
+      const save = loadGame();
+      if (save) {
+        setCurrentSceneId(save.currentSceneId);
+        setEmotions(save.emotions);
+        setChoicesMade(save.choicesMade || []);
+        setNarrativeFlags(save.narrativeFlags || {});
+        const scene = scenes[save.currentSceneId];
+        if (scene) currentChapterRef.current = scene.chapter;
+      }
+    }
+  }, []);
+
+  // ESC para pausa
+  useEffect(() => {
+    const handleKey = (e) => {
+      if (e.key === "Escape" && !chapterTransition) {
+        setIsPaused((prev) => !prev);
+      }
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [chapterTransition]);
 
   const currentScene = scenes[currentSceneId];
 
@@ -55,7 +87,7 @@ export default function Game() {
 
   const handleChoice = useCallback(
     (choice) => {
-      if (transitioning) return;
+      if (transitioning || isPaused) return;
       setTransitioning(true);
       setChoicesMade((prev) => [...prev, choice.id]);
 
@@ -76,8 +108,6 @@ export default function Game() {
         nextChapter !== currentScene.chapter &&
         nextChapter !== currentChapterRef.current;
 
-      // Esperar que la animación de salida ocurra (500ms)
-      // luego cambiar escena o mostrar transición de capítulo
       setTimeout(() => {
         if (isChapterChange) {
           currentChapterRef.current = nextChapter;
@@ -87,7 +117,6 @@ export default function Game() {
             location: nextScene.location,
             nextSceneId: choice.nextScene,
           });
-          // No cambiamos currentSceneId aquí — lo hace handleTransitionComplete
           setTransitioning(false);
         } else {
           setCurrentSceneId(choice.nextScene);
@@ -97,7 +126,7 @@ export default function Game() {
         }
       }, 500);
     },
-    [currentScene, applyEmotionShift, transitioning]
+    [currentScene, applyEmotionShift, transitioning, isPaused]
   );
 
   const handleTransitionComplete = useCallback(() => {
@@ -110,7 +139,7 @@ export default function Game() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [chapterTransition]);
 
-  const handleRestart = () => {
+  const handleRestart = useCallback(() => {
     setCurrentSceneId("intro");
     setEmotions({ ...INITIAL_EMOTIONS });
     setChoicesMade([]);
@@ -118,7 +147,19 @@ export default function Game() {
     setTextComplete(false);
     setChapterTransition(null);
     setTransitioning(false);
+    setIsPaused(false);
     currentChapterRef.current = scenes["intro"]?.chapter;
+  }, []);
+
+  const handleGoHome = useCallback(() => {
+    navigate("/");
+  }, [navigate]);
+
+  const gameState = {
+    currentSceneId,
+    emotions,
+    choicesMade,
+    narrativeFlags,
   };
 
   if (!currentScene) {
@@ -130,6 +171,9 @@ export default function Game() {
   }
 
   if (currentScene.isEnding) {
+    if (currentScene.endingType) {
+      unlockEnding(currentScene.endingType);
+    }
     return (
       <EndingScreen
         scene={currentScene}
@@ -145,7 +189,14 @@ export default function Game() {
   return (
     <div className="min-h-screen bg-background film-grain">
 
-      {/* Transición entre capítulos — capa encima de todo */}
+      <PauseMenu
+        isOpen={isPaused}
+        onClose={() => setIsPaused(false)}
+        onRestart={handleRestart}
+        onGoHome={handleGoHome}
+        gameState={gameState}
+      />
+
       <AnimatePresence>
         {chapterTransition && (
           <ChapterTransition
@@ -163,17 +214,17 @@ export default function Game() {
         {/* Top bar */}
         <div className="flex items-center justify-between mb-6">
           <button
-            onClick={() => navigate("/")}
-            className="text-[10px] font-special uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors"
+            onClick={() => setIsPaused(true)}
+            className="flex items-center gap-2 text-[10px] font-special uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors"
           >
-            ← Menú
+            <Menu className="w-3.5 h-3.5" />
+            Menú
           </button>
           <span className="text-[10px] font-special uppercase tracking-widest text-muted-foreground">
             Decisiones: {choicesMade.length}
           </span>
         </div>
 
-        {/* AnimatePresence solo controla el fade entre escenas */}
         <AnimatePresence mode="wait">
           <motion.div
             key={currentSceneId}
