@@ -2,19 +2,15 @@
 // Karl Müller, Berlín 1939 — Historia expandida
 
 export const EMOTIONS = {
-  miedo:         { label: "Miedo",          color: "hsl(260, 50%, 55%)", icon: "😰" },
-  ira:           { label: "Ira",            color: "hsl(0,   70%, 55%)", icon: "😤" },
-  patriotismo:   { label: "Patriotismo",    color: "hsl(38,  60%, 50%)", icon: "⚔️" },
-  incertidumbre: { label: "Incertidumbre",  color: "hsl(200, 30%, 55%)", icon: "😶" },
-  perdida:       { label: "Pérdida",        color: "hsl(220, 20%, 45%)", icon: "💔" },
+  humanidad:  { label: "Humanidad",   color: "hsl(38, 55%, 48%)",  icon: "🕊️" },
+  miedo:      { label: "Miedo",       color: "hsl(260, 45%, 52%)", icon: "😰" },
+  conviccion: { label: "Convicción",  color: "hsl(200, 40%, 48%)", icon: "⚔️" },
 };
 
 export const INITIAL_EMOTIONS = {
+  humanidad: 80,
   miedo: 20,
-  ira: 10,
-  patriotismo: 55,
-  incertidumbre: 25,
-  perdida: 5,
+  conviccion: 60,
 };
 
 // Helper para verificar si una elección está bloqueada dado el estado emocional
@@ -54,29 +50,29 @@ Tu madre empieza a llorar sin hacer ruido. Solo se le mueven los hombros.
 
 El sobre sigue ahí. Lo tienes que abrir tú.`,
     historicalNote: "El 1 de septiembre de 1939 Alemania invadió Polonia. En las semanas siguientes, más de un millón de jóvenes alemanes recibieron su convocatoria militar. Para muchos fue la última vez que verían a sus familias.",
-    emotionShift: { miedo: 15, incertidumbre: 15, patriotismo: 5, perdida: 5 },
+    emotionShift: { humanidad: -3, miedo: 6, conviccion: 2 },
     choices: [
       {
         id: "accept_proud",
         text: "Abrir el sobre con calma y decir: \"Es mi deber. Alemania me necesita.\"",
         subtext: "Fritz te mira con admiración. Pero tu padre cierra los ojos.",
-        emotionRequires: { miedo: { max: 60 } },
+        emotionRequires: { miedo: { max: 55 } },
         lockedMessage: "El miedo te aprieta la garganta. Las palabras de orgullo no salen.",
-        emotionShift: { patriotismo: 25, ira: 5, miedo: -10, incertidumbre: -5 },
+        emotionShift: { humanidad: -2, miedo: -4, conviccion: 10 },
         nextScene: "farewell_proud",
       },
       {
         id: "accept_afraid",
         text: "Abrir el sobre y abrazar a tu madre sin decir nada.",
         subtext: "Las palabras sobran. Ella huele igual que cuando eras pequeño.",
-        emotionShift: { perdida: 20, miedo: 20, incertidumbre: 10 },
+        emotionShift: { humanidad: -5, miedo: 8, conviccion: -3 },
         nextScene: "farewell_tender",
       },
       {
         id: "ask_father",
         text: "Dejar el sobre sobre la mesa y mirar a tu padre: \"Cuéntame lo que viste tú.\"",
         subtext: "Lleva veinte años callando. Quizá hoy hable.",
-        emotionShift: { incertidumbre: 25, miedo: 10, patriotismo: -15 },
+        emotionShift: { humanidad: -2, miedo: 5, conviccion: -8 },
         nextScene: "father_talk",
       },
     ],
@@ -106,20 +102,20 @@ La pone en tu mano sin decir nada más. Las palabras que no os decís llenan el 
 
 A la mañana siguiente, en la estación, tu madre te mete dos cartas en el bolsillo. "Una para que la leas hoy. Otra para que la leas si algún día piensas que no puedes más."`,
     historicalNote: "Millones de familias alemanas vivieron estas despedidas. Muchos padres que habían sobrevivido la Primera Guerra Mundial veían con horror repetirse la historia.",
-    emotionShift: { perdida: 15, miedo: 15, patriotismo: -5 },
+    emotionShift: { humanidad: -3, miedo: 5, conviccion: -2 },
     choices: [
       {
         id: "read_letter_now",
         text: "Leer la primera carta de tu madre en el tren — ahora mismo.",
         subtext: "\"Karl mío, recuerda que antes de ser soldado eres mi hijo.\"",
-        emotionShift: { perdida: 20, incertidumbre: 10, patriotismo: -5 },
+        emotionShift: { humanidad: -3, miedo: -3, conviccion: -2 },
         nextScene: "letter_first",
       },
       {
         id: "save_both_letters",
         text: "Guardar ambas cartas sin leerlas — cuando las necesites, las leerás.",
         subtext: "Hay cosas que es mejor no sentir hasta que sea necesario.",
-        emotionShift: { patriotismo: 10, incertidumbre: 10, miedo: 5 },
+        emotionShift: { humanidad: -1, miedo: 3, conviccion: 4 },
         nextScene: "training_barracks",
       },
     ],
@@ -147,20 +143,20 @@ A la mañana siguiente, en la estación, Fritz se abraza a ti y no te suelta. Tu
 
 El tren parte. Miras por la ventanilla hasta que la figura de tu familia se vuelve un punto y luego nada.`,
     historicalNote: "Las estaciones de tren se convirtieron en lugares de despedida masiva. Fotógrafos de la época documentaron miles de estos momentos que definen la guerra más allá de los campos de batalla.",
-    emotionShift: { perdida: 25, miedo: 15, incertidumbre: 10, patriotismo: -10 },
+    emotionShift: { humanidad: -4, miedo: 5, conviccion: -4 },
     choices: [
       {
         id: "journal_on_train",
         text: "Sacar un cuaderno y empezar a escribir — necesitas procesar todo esto.",
         subtext: "Escribir es la única forma que conoces de poner orden al caos.",
-        emotionShift: { incertidumbre: 10, perdida: 5, miedo: -5 },
+        emotionShift: { humanidad: -1, miedo: -2, conviccion: -1 },
         nextScene: "training_barracks",
       },
       {
         id: "talk_stranger",
         text: "Hablar con el soldado que tienes al lado — también va a los cuarteles.",
         subtext: "Se llama Hans. Panadero de Hamburgo. Tiene una sonrisa demasiado grande para ir a la guerra.",
-        emotionShift: { miedo: -10, patriotismo: 5, incertidumbre: -5 },
+        emotionShift: { humanidad: 0, miedo: -4, conviccion: 3 },
         nextScene: "training_barracks",
       },
     ],
@@ -194,20 +190,20 @@ Sus ojos, que siempre creíste duros como el roble, están húmedos.
 
 Asentir es lo único que puedes hacer.`,
     historicalNote: "Un millón de veteranos alemanes de la Primera Guerra Mundial vieron partir a sus hijos en 1939. Su silencio sobre las atrocidades que habían vivido fue, paradójicamente, lo que permitió que una nueva generación marchara con entusiasmo.",
-    emotionShift: { miedo: 30, incertidumbre: 25, perdida: 15, patriotismo: -25 },
+    emotionShift: { humanidad: -4, miedo: 10, conviccion: -10 },
     choices: [
       {
         id: "promise_survive",
         text: "\"Te lo juro, padre. Volveré.\" — Y lo dices en serio.",
         subtext: "Sabes que es una promesa que puede que no puedas cumplir. La haces igualmente.",
-        emotionShift: { perdida: 10, miedo: 5, incertidumbre: -10 },
+        emotionShift: { humanidad: -2, miedo: 2, conviccion: 3 },
         nextScene: "farewell_tender",
       },
       {
         id: "promise_human",
         text: "\"No me convertiré en un monstruo. Eso sí te lo prometo.\"",
         subtext: "No sabes aún lo que eso costará.",
-        emotionShift: { incertidumbre: 20, miedo: 10, patriotismo: -15 },
+        emotionShift: { humanidad: -1, miedo: 4, conviccion: -6 },
         nextScene: "farewell_tender",
       },
     ],
@@ -239,27 +235,27 @@ Hans, desde arriba, responde: "Calla, filósofo. Hablas demasiado para quien tan
 
 Pero Werner tiene razón. Y todos lo sabéis.`,
     historicalNote: "El entrenamiento básico de la Wehrmacht duraba entre seis y ocho semanas. Los reclutas eran sometidos a una intensa presión psicológica diseñada para reemplazar su identidad individual por la del soldado del Reich.",
-    emotionShift: { miedo: 10, incertidumbre: 10, patriotismo: 10, ira: 5 },
+    emotionShift: { humanidad: -3, miedo: 4, conviccion: 4 },
     choices: [
       {
         id: "excel_training",
         text: "Destacar en el entrenamiento — ser el mejor tirador, el más disciplinado.",
         subtext: "Si vas a ir a la guerra, al menos irás preparado. Y quizás eso te mantenga vivo.",
-        emotionShift: { patriotismo: 15, ira: 10, miedo: -10, incertidumbre: -5 },
+        emotionShift: { humanidad: -3, miedo: -4, conviccion: 7 },
         nextScene: "training_incident",
       },
       {
         id: "bond_with_hans",
         text: "Concentrarte en sobrevivir y en cuidar a los tuyos — Hans, Werner.",
         subtext: "En la guerra, los amigos son más valiosos que las medallas.",
-        emotionShift: { perdida: 5, miedo: 5, incertidumbre: 5, patriotismo: -5 },
+        emotionShift: { humanidad: 2, miedo: 2, conviccion: -2 },
         nextScene: "training_incident",
       },
       {
         id: "question_orders",
         text: "Hacerle una pregunta al sargento Kessler que nadie se atreve a hacer.",
         subtext: "\"¿Usted ha estado en combate, Herr Feldwebel?\" — Las respuestas incómodas son las honestas.",
-        emotionShift: { incertidumbre: 20, miedo: 10, patriotismo: -15, ira: 5 },
+        emotionShift: { humanidad: -1, miedo: 4, conviccion: -7 },
         nextScene: "training_incident",
       },
     ],
@@ -290,31 +286,31 @@ Nadie ha dado la orden de pegarle. Pero nadie ha dado la orden de no hacerlo.
 
 El anciano te mira. Sus ojos no piden ayuda — hace tiempo que aprendió que pedir ayuda no sirve. Solo miran.`,
     historicalNote: "La persecución de judíos y otras minorías fue sistemática y visible en la Alemania nazi. Los soldados rasos fueron testigos frecuentes o participantes de estos actos incluso antes del comienzo del Holocausto industrializado.",
-    emotionShift: { miedo: 15, incertidumbre: 25, perdida: 20, ira: 10 },
+    emotionShift: { humanidad: -8, miedo: 8, conviccion: -6 },
     choices: [
       {
         id: "intervene_quietly",
         text: "Acercarte al anciano y ayudarle a levantar la pala — sin hacer ruido, sin llamar la atención.",
         subtext: "No es un gesto heroico. Es lo mínimo que puedes hacer siendo humano.",
-        emotionRequires: { ira: { max: 50 } },
+        // sin restricción (ira eliminada),
         lockedMessage: "Estás demasiado tenso. Cada músculo te pide reaccionar, no actuar con calma.",
-        emotionShift: { incertidumbre: 10, perdida: 5, patriotismo: -15, ira: -5 },
+        emotionShift: { humanidad: 3, miedo: -2, conviccion: -4 },
         nextScene: "france_roads",
       },
       {
         id: "look_away",
         text: "Apartar la mirada y cumplir con tu puesto — no es tu responsabilidad.",
         subtext: "\"Órdenes son órdenes.\" Esa frase, descubres, tiene un peso enorme cuando se usa para callarse.",
-        emotionShift: { ira: 20, incertidumbre: 15, perdida: 25, patriotismo: -5 },
+        emotionShift: { humanidad: -6, miedo: 3, conviccion: -2 },
         nextScene: "france_roads",
       },
       {
         id: "tell_werner",
         text: "Esa noche, decirle a Werner lo que sentiste — necesitas entender qué acaba de pasar.",
         subtext: "Werner tiene más palabras que tú para lo que estáis viendo.",
-        emotionRequires: { incertidumbre: { min: 30 } },
+        emotionRequires: { miedo: { min: 30 } },
         lockedMessage: "Aún no tienes palabras para lo que sientes. Ni siquiera sabes qué preguntarle.",
-        emotionShift: { incertidumbre: 20, perdida: 10, miedo: 10, patriotismo: -10 },
+        emotionShift: { humanidad: -2, miedo: 4, conviccion: -4 },
         nextScene: "france_roads",
       },
     ],
@@ -344,27 +340,27 @@ El Oberleutnant Brandt levanta el brazo: "¡Seguimos! ¡No os detengáis!"
 
 El niño sigue llorando.`,
     historicalNote: "Los bombardeos de la Luftwaffe sobre las columnas de refugiados en las carreteras de Francia y Bélgica en mayo de 1940 causaron miles de muertes civiles. El éxodo fue uno de los movimientos masivos de población más grandes de la historia.",
-    emotionShift: { miedo: 20, perdida: 30, incertidumbre: 15, patriotismo: -20, ira: 10 },
+    emotionShift: { humanidad: -5, miedo: 8, conviccion: -8 },
     choices: [
       {
         id: "stop_child",
         text: "Romperte del pelotón y acudir al niño — aunque Brandt te esté mirando.",
         subtext: "No sabes qué vas a hacer cuando llegues. Pero no puedes dejarlo ahí.",
-        emotionShift: { perdida: 15, miedo: 10, patriotismo: -20, incertidumbre: -10 },
+        emotionShift: { humanidad: 3, miedo: 4, conviccion: -6 },
         nextScene: "france_village",
       },
       {
         id: "follow_orders_france",
         text: "Seguir marchando — Brandt tiene razón, detenerse no cambia lo que ya pasó.",
         subtext: "Cada paso que das cargando ese pensamiento pesa más que el fusil.",
-        emotionShift: { ira: 20, perdida: 25, incertidumbre: 10, patriotismo: -10 },
+        emotionShift: { humanidad: -5, miedo: 2, conviccion: -3 },
         nextScene: "france_village",
       },
       {
         id: "ask_hans",
         text: "Mirar a Hans — ¿él también lo ha visto? ¿Qué hace él?",
         subtext: "A veces buscamos en los otros permiso para sentir lo que ya sentimos.",
-        emotionShift: { perdida: 15, incertidumbre: 15, miedo: 5 },
+        emotionShift: { humanidad: 1, miedo: 2, conviccion: -1 },
         nextScene: "france_village",
       },
     ],
@@ -395,29 +391,29 @@ Desde el campanario, los franceses siguen disparando. Uno de ellos grita algo en
 
 Hay tres opciones delante de ti y tienes quince segundos para elegir.`,
     historicalNote: "El combate urbano en los pueblos franceses fue frecuente durante la invasión de 1940. Los soldados tomaban decisiones de vida o muerte en segundos, con información incompleta y bajo fuego real.",
-    emotionShift: { miedo: 30, ira: 15 },
+    emotionShift: { humanidad: -2, miedo: 10, conviccion: 0 },
     choices: [
       {
         id: "assault_direct",
         text: "Asalto directo — correr hacia la iglesia con tu escuadrón bajo cobertura de fuego.",
         subtext: "Rápido, brutal, arriesgado. Algunos no llegarán a la puerta.",
-        emotionShift: { ira: 25, miedo: 10, patriotismo: 10 },
+        emotionShift: { humanidad: -4, miedo: 3, conviccion: 5 },
         nextScene: "church_assault",
       },
       {
         id: "shout_surrender",
         text: "Gritar en francés antes de atacar — darles la oportunidad de rendirse.",
         subtext: "Tu francés del colegio es terrible. Pero es un intento.",
-        emotionRequires: { ira: { max: 60 } },
+        // sin restricción (ira eliminada),
         lockedMessage: "La rabia te ciega. No puedes formular palabras de paz cuando todo en ti quiere atacar.",
-        emotionShift: { incertidumbre: 15, miedo: 10, perdida: -5, ira: -10 },
+        emotionShift: { humanidad: 2, miedo: 3, conviccion: -2 },
         nextScene: "church_parley",
       },
       {
         id: "flank_through_houses",
         text: "Flanquear por los jardines traseros — sorprenderles sin un disparo si es posible.",
         subtext: "Más tiempo. Más riesgo personal. Menos bajas para ambos lados.",
-        emotionShift: { miedo: 15, incertidumbre: 10, perdida: 5 },
+        emotionShift: { humanidad: 1, miedo: 5, conviccion: 0 },
         nextScene: "church_flank",
       },
     ],
@@ -450,27 +446,27 @@ Hans está vomitando en un rincón. El francés joven que se rindió está arrod
 
 Hay un muerto entre los tuyos: Friedrich, un chico de Dresde cuyo nombre no habías aprendido todavía. Ya no podrás aprenderlo.`,
     historicalNote: "Estudios psicológicos realizados tras la guerra mostraron que muchos soldados describían el primer combate como una experiencia disociativa — como si actuaran desde fuera de su cuerpo. La normalización de matar fue uno de los efectos más profundos y duraderos de la guerra.",
-    emotionShift: { miedo: 15, ira: 15, perdida: 30, patriotismo: -10, incertidumbre: 10 },
+    emotionShift: { humanidad: -7, miedo: 5, conviccion: -4 },
     choices: [
       {
         id: "sit_with_hans",
         text: "Ir a donde está Hans y sentarte a su lado sin decir nada.",
         subtext: "A veces el silencio compartido es la única forma honesta de procesar lo que acaba de pasar.",
-        emotionShift: { perdida: 10, incertidumbre: -5, miedo: -5 },
+        emotionShift: { humanidad: 2, miedo: -2, conviccion: 0 },
         nextScene: "after_battle_reflection",
       },
       {
         id: "check_prisoner",
         text: "Acercarte al prisionero francés — preguntarle su nombre.",
         subtext: "No sabes por qué. Quizá porque Friedrich ya no tiene nombre para ti y necesitas que este hombre siga siendo una persona.",
-        emotionShift: { perdida: 15, incertidumbre: 10, patriotismo: -15 },
+        emotionShift: { humanidad: 3, miedo: 0, conviccion: -4 },
         nextScene: "after_battle_reflection",
       },
       {
         id: "report_brandt",
         text: "Informar a Brandt profesionalmente — bajas, prisioneros, munición consumida.",
         subtext: "Convertirte en el soldado que esperan. Quizá sea más fácil así.",
-        emotionShift: { patriotismo: 10, ira: 10, perdida: 10, incertidumbre: -10 },
+        emotionShift: { humanidad: -3, miedo: -2, conviccion: 5 },
         nextScene: "after_battle_reflection",
       },
     ],
@@ -509,20 +505,20 @@ Cuatro soldados franceses bajan. Están exhaustos, hambrientos, con heridas sin 
 
 Brandt te agarra del brazo en cuanto termina: "No vuelvas a hacer eso sin mi orden."`,
     historicalNote: "El Convenio de Ginebra de 1929 establecía el trato a los prisioneros de guerra. Fue sistemáticamente violado por todas las partes durante la guerra, especialmente en el Frente Oriental.",
-    emotionShift: { incertidumbre: 10, miedo: -10, perdida: -15, patriotismo: 5 },
+    emotionShift: { humanidad: 3, miedo: -4, conviccion: 2 },
     choices: [
       {
         id: "accept_brandt_warning",
         text: "Aceptar la advertencia de Brandt — \"Entendido, Herr Oberleutnant.\"",
         subtext: "Sabes cuándo ceder. Pero también sabes lo que acaba de pasar tiene valor.",
-        emotionShift: { patriotismo: 5, incertidumbre: 10 },
+        emotionShift: { humanidad: 0, miedo: 0, conviccion: 2 },
         nextScene: "after_battle_reflection",
       },
       {
         id: "push_back_brandt",
         text: "Responder: \"Sin bajas propias, Herr Oberleutnant. Solo cuatro prisioneros.\"",
         subtext: "Los resultados te dan la razón. Aunque Brandt nunca te lo agradecerá.",
-        emotionShift: { ira: 20, incertidumbre: 5, patriotismo: -10 },
+        emotionShift: { humanidad: -1, miedo: 2, conviccion: -3 },
         nextScene: "after_battle_reflection",
       },
     ],
@@ -553,20 +549,20 @@ Cuando Brandt llega y ve que habéis tomado la iglesia sin bajas, te felicita y 
 
 Tú miras la foto del sargento francés — una mujer joven y un niño de unos tres años. Miráis los dos esa foto al mismo tiempo. Él te mira a ti. Tiene tus mismos ojos de no querer estar aquí.`,
     historicalNote: "Las tácticas de flanqueo y sorpresa eran fundamentales en la doctrina alemana de la Blitzkrieg. Muchos soldados veteranos insistían en que la táctica que minimizaba bajas era siempre la preferible, independientemente del orgullo.",
-    emotionShift: { perdida: 20, incertidumbre: 10, miedo: 5, patriotismo: -5 },
+    emotionShift: { humanidad: -2, miedo: 3, conviccion: -2 },
     choices: [
       {
         id: "acknowledge_photo",
         text: "Señalar la foto y decirle con gestos que la guarde — que la mantendrán con él.",
         subtext: "No hace falta idioma para ese gesto.",
-        emotionShift: { perdida: 10, patriotismo: -5, incertidumbre: -10 },
+        emotionShift: { humanidad: 3, miedo: 0, conviccion: -2 },
         nextScene: "after_battle_reflection",
       },
       {
         id: "ignore_photo",
         text: "Ignorar la foto y ocuparte de entregar los prisioneros a Brandt.",
         subtext: "Cuanto menos veas, menos cargas. O eso te dices.",
-        emotionShift: { ira: 5, incertidumbre: 10, perdida: 15 },
+        emotionShift: { humanidad: -3, miedo: 1, conviccion: 0 },
         nextScene: "after_battle_reflection",
       },
     ],
@@ -597,20 +593,20 @@ Al día siguiente llegan órdenes: avanzar hacia París.
 
 Y luego, mucho más tarde, hacia el este.`,
     historicalNote: "El filósofo alemán Viktor Frankl, prisionero en campos de concentración, escribió que incluso en las condiciones más extremas, el ser humano conserva la última libertad: la de elegir su actitud ante lo que le ocurre.",
-    emotionShift: { incertidumbre: 15, perdida: 10, patriotismo: -5 },
+    emotionShift: { humanidad: -3, miedo: 2, conviccion: -4 },
     choices: [
       {
         id: "answer_werner_yes",
         text: "Responder a Werner: \"Creo que sí. Pero requiere saber exactamente quién eres antes de empezar.\"",
         subtext: "No estás seguro de saberlo. Pero quieres creerlo.",
-        emotionShift: { incertidumbre: 10, miedo: -5, patriotismo: 5 },
+        emotionShift: { humanidad: 2, miedo: -2, conviccion: 3 },
         nextScene: "paris_falls",
       },
       {
         id: "answer_werner_no",
         text: "Responder a Werner: \"No. Creo que esto cambia a todo el mundo. La pregunta es en qué dirección.\"",
         subtext: "La honestidad a veces duele más que una bala.",
-        emotionShift: { perdida: 15, incertidumbre: 10, patriotismo: -10 },
+        emotionShift: { humanidad: -2, miedo: 0, conviccion: -4 },
         nextScene: "paris_falls",
       },
     ],
@@ -648,29 +644,29 @@ Nadie bebe más. Nadie habla. Hans mira su copa durante un rato muy largo y lueg
 
 "Entonces todavía no hemos terminado."`,
     historicalNote: "París fue declarada 'ciudad abierta' el 14 de junio de 1940 para evitar su destrucción. La ciudad permaneció ocupada hasta el 25 de agosto de 1944. La Operación Barbarroja — invasión de la URSS — comenzó el 22 de junio de 1941.",
-    emotionShift: { incertidumbre: 25, miedo: 25, patriotismo: -15, perdida: 10 },
+    emotionShift: { humanidad: -4, miedo: 8, conviccion: -8 },
     choices: [
       {
         id: "volunteer_east_pride",
         text: "\"Si hay que ir al este, iremos al este. Donde manden.\" — Lo dices en serio.",
         subtext: "El patriotismo, decides, no puede ser condicional. O lo eres o no lo eres.",
-        emotionRequires: { patriotismo: { min: 25 } },
+        emotionRequires: { conviccion: { min: 20 } },
         lockedMessage: "Abres la boca para decirlo, pero las palabras no salen. Ya no crees en eso.",
-        emotionShift: { patriotismo: 20, ira: 10, miedo: -5 },
+        emotionShift: { humanidad: -2, miedo: -2, conviccion: 8 },
         nextScene: "eastern_front",
       },
       {
         id: "write_home_paris",
         text: "Excusarte y salir a escribir una carta a casa — necesitas hablar con alguien que no esté aquí.",
         subtext: "Le escribes a Fritz. Le dices que París es hermosa. No le dices lo demás.",
-        emotionShift: { perdida: 25, incertidumbre: 10, miedo: 5 },
+        emotionShift: { humanidad: -2, miedo: 3, conviccion: -3 },
         nextScene: "eastern_front",
       },
       {
         id: "ask_werner_east",
         text: "Mirar a Werner y preguntarle en voz baja: \"¿Cuánto sabes de Rusia?\"",
         subtext: "Werner siempre sabe más de lo que conviene saber.",
-        emotionShift: { incertidumbre: 20, miedo: 20, patriotismo: -15 },
+        emotionShift: { humanidad: -1, miedo: 7, conviccion: -6 },
         nextScene: "eastern_front",
       },
     ],
@@ -704,29 +700,29 @@ Un soldado nuevo — un niño de diecisiete años de Baden, con la cara sin afei
 
 Brandt lo mira durante un segundo. "Lo que haga falta."`,
     historicalNote: "La Operación Barbarroja se detuvo ante Moscú en diciembre de 1941, cuando las temperaturas cayeron a -40°C. El ejército alemán no estaba equipado para el invierno ruso. Fue la primera gran derrota de la Wehrmacht.",
-    emotionShift: { miedo: 30, perdida: 30, incertidumbre: 20, patriotismo: -30, ira: 10 },
+    emotionShift: { humanidad: -8, miedo: 12, conviccion: -10 },
     choices: [
       {
         id: "care_for_hans",
         text: "Dedicarte a cuidar a Hans — hacer que coma, que duerma, que no se rinda.",
         subtext: "Si Hans muere, algo en ti muere también. Y lo sabes.",
-        emotionShift: { perdida: 20, miedo: 10, incertidumbre: -10 },
+        emotionShift: { humanidad: 2, miedo: 4, conviccion: -2 },
         nextScene: "atrocity_crossroads",
       },
       {
         id: "take_command",
         text: "Tomar el liderazgo informal del grupo — alguien tiene que mantener a la gente viva.",
         subtext: "No eres oficial. Pero eres el que más claro piensa cuando otros se paralizan.",
-        emotionShift: { patriotismo: 10, ira: 10, miedo: -10 },
+        emotionShift: { humanidad: -2, miedo: -4, conviccion: 6 },
         nextScene: "atrocity_crossroads",
       },
       {
         id: "break_down_alone",
         text: "Una noche, apartarte solo y dejar que te vengan abajo — necesitas llorar aunque sea una vez.",
         subtext: "Los hombres no lloran. Pero eso es mentira, y lo sabes.",
-        emotionRequires: { perdida: { min: 45 } },
+        emotionRequires: { humanidad: { max: 55 } },
         lockedMessage: "Quieres hacerlo. Pero no puedes aún. Algo dentro todavía resiste, todavía endurece.",
-        emotionShift: { perdida: 25, incertidumbre: 20, miedo: -15 },
+        emotionShift: { humanidad: 3, miedo: -5, conviccion: -3 },
         nextScene: "atrocity_crossroads",
       },
     ],
@@ -762,29 +758,29 @@ Brandt os mira. Luego mira al suelo. Se da la vuelta y se va hacia el extremo op
 
 Tú tienes diez segundos.`,
     historicalNote: "Los Einsatzgruppen y unidades Waffen-SS perpetraron masacres masivas de civiles en la URSS entre 1941 y 1944. Se calcula que asesinaron a más de 1,5 millones de personas. Muchos soldados de la Wehrmacht fueron testigos de estas acciones.",
-    emotionShift: { miedo: 35, perdida: 25, incertidumbre: 20, ira: 25, patriotismo: -30 },
+    emotionShift: { humanidad: -12, miedo: 15, conviccion: -15 },
     choices: [
       {
         id: "intervene_atrocity",
         text: "Ponerte delante — plantar los pies entre los SS y los civiles.",
         subtext: "No tienes autoridad para esto. No tienes el rango. No tienes ninguna razón práctica. Pero tienes las palabras de tu padre: 'no te conviertas en un monstruo.'",
-        emotionRequires: { perdida: { min: 40 }, miedo: { max: 85 } },
+        emotionRequires: { humanidad: { max: 60 }, miedo: { max: 80 } },
         lockedMessage: "Tu cuerpo no responde. Las piernas no se mueven. Has visto demasiado y ya no sabes si eres el tipo de hombre que hace esto.",
-        emotionShift: { miedo: 35, ira: 15, incertidumbre: -15, perdida: -10, patriotismo: -25 },
+        emotionShift: { humanidad: 5, miedo: 12, conviccion: -8 },
         nextScene: "intervene_aftermath",
       },
       {
         id: "take_cover_watch",
         text: "Meterte en una casa — no puedes pararlo, pero no tienes que verlo.",
         subtext: "No matar no es lo mismo que no ser cómplice. Pero es lo único que puedes controlar.",
-        emotionShift: { perdida: 40, incertidumbre: 15, miedo: 20, ira: 15 },
+        emotionShift: { humanidad: -8, miedo: 8, conviccion: -4 },
         nextScene: "watch_aftermath",
       },
       {
         id: "follow_brandt",
         text: "Seguir a Brandt — si él mira hacia otro lado, tú también.",
         subtext: "La obediencia como mecanismo de defensa. Dejar de pensar para dejar de sentir.",
-        emotionShift: { perdida: 35, incertidumbre: 20, ira: 20, patriotismo: -35 },
+        emotionShift: { humanidad: -7, miedo: 5, conviccion: -6 },
         nextScene: "watch_aftermath",
       },
     ],
@@ -817,20 +813,20 @@ Los SS se retiran. Los civiles no entienden qué ha pasado. Una mujer mayor te d
 
 Esa noche, Brandt te llama aparte: "Lo que pasó hoy no pasó. ¿Me entiendes, Müller? Si alguien pregunta, no estuvimos aquí." Hace una pausa. "Fue valiente. Y fue una estupidez. Ambas cosas a la vez."`,
     historicalNote: "Hubo casos documentados de oficiales y soldados de la Wehrmacht que se opusieron a masacres, a veces con éxito. Eran la excepción, no la regla. Algunos pagaron con su carrera militar o con su vida.",
-    emotionShift: { miedo: 20, perdida: -15, incertidumbre: 10, patriotismo: -15 },
+    emotionShift: { humanidad: 4, miedo: 6, conviccion: -4 },
     choices: [
       {
         id: "thank_brandt",
         text: "Agradecer a Brandt en privado — él también arriesgó algo hoy.",
         subtext: "Los hombres son más complicados que las etiquetas que les ponemos.",
-        emotionShift: { incertidumbre: 10, perdida: -10 },
+        emotionShift: { humanidad: 2, miedo: 0, conviccion: 0 },
         nextScene: "stalingrad_approach",
       },
       {
         id: "write_record",
         text: "Escribir en tu cuaderno lo que pasó — con nombres, fechas, detalles.",
         subtext: "Alguien tiene que ser testigo. Aunque ese alguien seas solo tú.",
-        emotionShift: { perdida: 10, incertidumbre: 5, miedo: 5 },
+        emotionShift: { humanidad: 2, miedo: 2, conviccion: -1 },
         nextScene: "stalingrad_approach",
       },
     ],
@@ -863,20 +859,20 @@ Guardas la nota. No respondes. No tienes respuesta.
 
 {{inject}}`,
     historicalNote: "La psicología moral denomina 'daño moral' al sufrimiento causado por participar en, o no impedir, actos que violan los propios valores éticos. Los veteranos de la Segunda Guerra Mundial sufrieron altísimas tasas de este tipo de trauma, muchas veces en silencio.",
-    emotionShift: { perdida: 45, incertidumbre: 20, ira: 20, miedo: 15, patriotismo: -30 },
+    emotionShift: { humanidad: -8, miedo: 6, conviccion: -7 },
     choices: [
       {
         id: "confess_werner",
         text: "Decirle a Werner que tiene razón — y que no sabes cómo vivir con eso.",
         subtext: "La honestidad no resuelve nada. Pero la mentira lo empeora todo.",
-        emotionShift: { perdida: 10, incertidumbre: -10 },
+        emotionShift: { humanidad: 3, miedo: -1, conviccion: -1 },
         nextScene: "stalingrad_approach",
       },
       {
         id: "bury_it_deep",
         text: "Enterrar todo lo que sentiste — necesitas seguir funcionando.",
         subtext: "Lo que entierras sin procesar crece en la oscuridad.",
-        emotionShift: { ira: 25, incertidumbre: 5, perdida: 10 },
+        emotionShift: { humanidad: -4, miedo: 0, conviccion: 2 },
         nextScene: "stalingrad_approach",
       },
     ],
@@ -916,29 +912,29 @@ Hans está demasiado enfermo para estar de pie. Lo sostiene Werner.
 
 Tú miras las ruinas de Stalingrado a tu alrededor y piensas en la carpintería de tu padre.`,
     historicalNote: "La Operación Urano (noviembre de 1942) fue el contraataque soviético que cercó al 6.° Ejército alemán en Stalingrado. De los 300.000 soldados cercados, unos 91.000 se rindieron en febrero de 1943. Menos de 6.000 volvieron a Alemania con vida.",
-    emotionShift: { miedo: 35, perdida: 30, incertidumbre: 20, patriotismo: -30, ira: 20 },
+    emotionShift: { humanidad: -8, miedo: 12, conviccion: -10 },
     choices: [
       {
         id: "plan_breakout",
         text: "Proponer a Werner una fuga — de noche, por el flanco suroeste, mientras queda tiempo.",
         subtext: "Deserción. Pelotón de fusilamiento si te cogen los alemanes. Campo de prisioneros si te cogen los rusos. Pero quizás la única salida real.",
-        emotionRequires: { miedo: { min: 60 } },
+        emotionRequires: { miedo: { min: 55 } },
         lockedMessage: "Aún no estás lo bastante desesperado como para pensar en desertar. Una parte de ti todavía confía.",
-        emotionShift: { miedo: 20, incertidumbre: 20, perdida: 5 },
+        emotionShift: { humanidad: -2, miedo: 7, conviccion: -5 },
         nextScene: "breakout_planning",
       },
       {
         id: "obey_hold",
         text: "Mantener la posición — cumplir las órdenes mientras haya una oportunidad.",
         subtext: "Quizás el mando tiene un plan. Quizás vengan refuerzos. Quizás.",
-        emotionShift: { patriotismo: 10, ira: 10, miedo: 10 },
+        emotionShift: { humanidad: -2, miedo: 4, conviccion: 3 },
         nextScene: "stalingrad_siege",
       },
       {
         id: "focus_hans",
         text: "Lo único que importa ahora mismo es que Hans no muera esta noche.",
         subtext: "El mundo puede esperar. Tu amigo no puede.",
-        emotionShift: { perdida: 20, miedo: 10, incertidumbre: -10 },
+        emotionShift: { humanidad: 2, miedo: 4, conviccion: -2 },
         nextScene: "stalingrad_siege",
       },
     ],
@@ -967,27 +963,27 @@ En tu mochila tienes lo único que te queda: una lata de carne en conserva. La �
 
 Y entonces piensas en Hans, con su fiebre, que lleva tres días sin comer casi nada.`,
     historicalNote: "Durante el cerco de Stalingrado, la población civil rusa también estaba atrapada en la ciudad. Compartían con los combatientes el hambre y el frío. Se calcula que más de 40.000 civiles murieron durante la batalla.",
-    emotionShift: { perdida: 30, miedo: 20, incertidumbre: 20, ira: 5 },
+    emotionShift: { humanidad: -6, miedo: 8, conviccion: -6 },
     choices: [
       {
         id: "give_civilians",
         text: "Dar la lata a la madre — los niños la necesitan más.",
         subtext: "Hans te entendería. Aunque muera, te entendería.",
-        emotionShift: { perdida: 25, patriotismo: -10, incertidumbre: -10 },
+        emotionShift: { humanidad: 4, miedo: 0, conviccion: -3 },
         nextScene: "hans_death",
       },
       {
         id: "keep_for_hans",
         text: "Guardar la lata para Hans — es tu amigo, y quizás esto le salve.",
         subtext: "La lealtad también tiene un precio. Todo lo tiene.",
-        emotionShift: { incertidumbre: 20, ira: 5, perdida: 20 },
+        emotionShift: { humanidad: -3, miedo: 2, conviccion: 1 },
         nextScene: "hans_death",
       },
       {
         id: "split_tin",
         text: "Abrir la lata y dividirla — la mitad para los niños, la mitad para Hans.",
         subtext: "No es suficiente para nadie. Pero es lo que tienes.",
-        emotionShift: { perdida: 15, incertidumbre: 15, miedo: 5 },
+        emotionShift: { humanidad: 1, miedo: 2, conviccion: -1 },
         nextScene: "hans_death",
       },
     ],
@@ -1022,22 +1018,22 @@ Te mira a ti. "Cuida de Werner, Karl."
 
 Hay un tipo de silencio que no tiene nada que ver con la ausencia de sonido.`,
     historicalNote: "Los intentos de fuga del cerco de Stalingrado eran sumamente peligrosos. La mayoría de los que lo intentaron fueron capturados por los soviéticos o ejecutados por sus propios oficiales al ser descubiertos.",
-    emotionShift: { miedo: 25, perdida: 35 },
+    emotionShift: { humanidad: -4, miedo: 8, conviccion: -5 },
     choices: [
       {
         id: "escape_leave_hans",
         text: "Aceptar lo que dice Hans y preparar la fuga — esta noche.",
         subtext: "La mayor crueldad a veces es hacer lo que alguien te pide.",
-        emotionRequires: { perdida: { min: 55 } },
+        emotionRequires: { humanidad: { max: 45 } },
         lockedMessage: "No puedes. Físicamente no puedes dar ese paso. Tus piernas no te obedecen cuando piensas en dejarlo.",
-        emotionShift: { perdida: 40, miedo: 20, incertidumbre: 10 },
+        emotionShift: { humanidad: -6, miedo: 7, conviccion: -4 },
         nextScene: "escape_attempt",
       },
       {
         id: "refuse_leave",
         text: "No. No vais a dejarlo. Buscáis otra forma — los tres juntos o ninguno.",
         subtext: "Quizás sea una condena para todos. Lo sabes. Te da igual.",
-        emotionShift: { perdida: 15, miedo: 15, incertidumbre: -10, patriotismo: 5 },
+        emotionShift: { humanidad: 3, miedo: 5, conviccion: 2 },
         nextScene: "stalingrad_final",
       },
     ],
@@ -1066,22 +1062,22 @@ En algún momento del segundo día, en una granja abandonada, encontráis a una 
 
 No hay explicación para ese gesto. Solo existe.`,
     historicalNote: "Algunos desertores alemanes encontraron ayuda inesperada en la población civil soviética, a menudo personas que habían perdido a sus propios hijos en la guerra y actuaban desde una humanidad que ningún régimen había podido extinguir.",
-    emotionShift: { miedo: 25, perdida: 25, incertidumbre: 10 },
+    emotionShift: { humanidad: -4, miedo: 8, conviccion: -4 },
     choices: [
       {
         id: "trust_farmer",
         text: "Entrar — confiar en esa mujer aunque no haya ninguna razón lógica para hacerlo.",
         subtext: "Hay momentos en que la única opción es confiar en la humanidad de un extraño.",
-        emotionRequires: { perdida: { min: 60 } },
+        emotionRequires: { humanidad: { max: 40 } },
         lockedMessage: "Has visto demasiado. No puedes confiar. El miedo gana a la esperanza.",
-        emotionShift: { incertidumbre: -15, miedo: -15, perdida: -10 },
+        emotionShift: { humanidad: 4, miedo: -6, conviccion: 2 },
         nextScene: "ending_desercion",
       },
       {
         id: "run_from_farmer",
         text: "Agradecer con un gesto y seguir — no podéis arriesgar que alguien os denuncie.",
         subtext: "La desconfianza también es una forma de miedo.",
-        emotionShift: { miedo: 20, incertidumbre: 15, perdida: 15 },
+        emotionShift: { humanidad: -3, miedo: 7, conviccion: -3 },
         nextScene: "ending_tragedia",
       },
     ],
@@ -1110,20 +1106,20 @@ Werner camina cojeando a tu lado. Os miráis. No hay palabras para esto tampoco.
 
 La marcha hacia los campos de prisioneros comienza bajo un cielo gris que parece no tener fin.`,
     historicalNote: "La rendición de Stalingrado el 2 de febrero de 1943 fue percibida en Alemania como una catástrofe nacional. El régimen nazi había prometido la victoria. La realidad de la derrota fue devastadora para la moral del país.",
-    emotionShift: { perdida: 40, miedo: 15, patriotismo: -30, incertidumbre: 10 },
+    emotionShift: { humanidad: -6, miedo: 5, conviccion: -8 },
     choices: [
       {
         id: "walk_for_fritz",
         text: "Poner un pie delante del otro pensando en Fritz — él te espera.",
         subtext: "Fritz tendría ahora diecinueve años. La misma edad que tú cuando te fuiste.",
-        emotionShift: { perdida: 10, incertidumbre: 5 },
+        emotionShift: { humanidad: 2, miedo: -2, conviccion: 3 },
         nextScene: "ending_supervivencia",
       },
       {
         id: "walk_with_werner",
         text: "Darle el brazo a Werner y caminar juntos — lo que quede de este camino, juntos.",
         subtext: "Dos hombres que ya no tienen país. Solo se tienen el uno al otro.",
-        emotionShift: { perdida: 15, incertidumbre: -5 },
+        emotionShift: { humanidad: 3, miedo: -2, conviccion: 1 },
         nextScene: "ending_sacrificio",
       },
       // Camino al ending_heroismo: solo accesible si el jugador
@@ -1133,9 +1129,9 @@ La marcha hacia los campos de prisioneros comienza bajo un cielo gris que parece
         id: "one_last_thing",
         text: "Espera. Hay algo que todavía puedes hacer antes de que todo termine.",
         subtext: "En el caos de la rendición, entre las ruinas, oyes algo. Voces de niños.",
-        emotionRequires: { perdida: { min: 70 }, patriotismo: { max: 30 } },
+        emotionRequires: { humanidad: { max: 30 }, conviccion: { max: 25 } },
         lockedMessage: "No te queda nada para dar. Solo el siguiente paso.",
-        emotionShift: { perdida: 10, miedo: -10 },
+        emotionShift: { humanidad: 4, miedo: -4, conviccion: 2 },
         nextScene: "ending_heroismo",
       },
     ],
@@ -1175,7 +1171,7 @@ Mamá"
 
 El tren traquetea sobre las vías. Afuera, los campos se vuelven más abiertos, más vacíos. Doblas la carta con cuidado y la guardas en el bolsillo interior, contra el pecho.`,
     historicalNote: "Millones de madres escribieron cartas similares entre 1939 y 1945. Muchas nunca fueron respondidas.",
-    emotionShift: { perdida: 15, miedo: -10, incertidumbre: -5 },
+    emotionShift: { humanidad: 3, miedo: -4, conviccion: 0 },
     choices: [
       {
         id: "continue_to_barracks",
@@ -1224,7 +1220,7 @@ La segunda carta de tu madre.
 
 Nunca has sentido esto hasta ahora.`,
     historicalNote: "Decenas de miles de soldados alemanes murieron de enfermedad y congelación en el cerco de Stalingrado antes de que terminara la batalla. Sus compañeros, cuando podían, improvisaban enterramientos con lo que encontraban.",
-    emotionShift: { perdida: 45, miedo: 10, incertidumbre: 10, ira: -10 },
+    emotionShift: { humanidad: -10, miedo: 5, conviccion: -8 },
     choices: [
       {
         id: "open_second_letter",
@@ -1237,7 +1233,7 @@ Nunca has sentido esto hasta ahora.`,
         id: "skip_letter_forward",
         text: "No abrir la carta — guardas lo que queda de ella para más tarde.",
         subtext: "Mientras esté cerrada, es una promesa que no se ha roto todavía.",
-        emotionShift: { incertidumbre: 10 },
+        emotionShift: { humanidad: -1, miedo: 2, conviccion: -1 },
         nextScene: "stalingrad_final",
       },
     ],
@@ -1278,7 +1274,7 @@ Afuera, Stalingrado se rinde lentamente al amanecer.
 
 Tú doblas la carta. La guardas en el bolsillo. Sigues.`,
     historicalNote: "Investigaciones posteriores sobre el bienestar psicológico de veteranos mostraron que los lazos afectivos — cartas, fotografías, recuerdos concretos de personas amadas — eran con frecuencia el factor más determinante en la voluntad de supervivencia bajo condiciones extremas.",
-    emotionShift: { perdida: -15, miedo: -15, incertidumbre: -10 },
+    emotionShift: { humanidad: 5, miedo: -6, conviccion: 4 },
     choices: [
       {
         id: "continue_after_letter",
