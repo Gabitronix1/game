@@ -14,12 +14,7 @@ import { ChevronDown } from "lucide-react";
 
 export default function Game() {
   const navigate = useNavigate();
-
-  // sceneId que se está MOSTRANDO (puede ir detrás de pendingSceneId durante la animación)
   const [currentSceneId, setCurrentSceneId] = useState("intro");
-  // sceneId al que vamos a ir una vez que la animación de salida termine
-  const [pendingSceneId, setPendingSceneId] = useState(null);
-
   const [emotions, setEmotions] = useState({ ...INITIAL_EMOTIONS });
   const [choicesMade, setChoicesMade] = useState([]);
   const [narrativeFlags, setNarrativeFlags] = useState({});
@@ -81,46 +76,35 @@ export default function Game() {
         nextChapter !== currentScene.chapter &&
         nextChapter !== currentChapterRef.current;
 
-      if (isChapterChange) {
-        // Guardamos el destino para después de la transición de capítulo
-        currentChapterRef.current = nextChapter;
-        // Iniciamos salida de escena actual, luego mostramos la pantalla de capítulo
-        setPendingSceneId(choice.nextScene);
-        setTimeout(() => {
+      // Esperar que la animación de salida ocurra (500ms)
+      // luego cambiar escena o mostrar transición de capítulo
+      setTimeout(() => {
+        if (isChapterChange) {
+          currentChapterRef.current = nextChapter;
           setChapterTransition({
             chapter: nextChapter,
             year: nextScene.year,
             location: nextScene.location,
             nextSceneId: choice.nextScene,
           });
+          // No cambiamos currentSceneId aquí — lo hace handleTransitionComplete
           setTransitioning(false);
-        }, 500);
-      } else {
-        // Cambio normal: marcamos pendingSceneId para que AnimatePresence
-        // no muestre el contenido nuevo hasta que onExitComplete lo permita
-        setPendingSceneId(choice.nextScene);
-        setTextComplete(false);
-      }
+        } else {
+          setCurrentSceneId(choice.nextScene);
+          setTextComplete(false);
+          setTransitioning(false);
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+      }, 500);
     },
     [currentScene, applyEmotionShift, transitioning]
   );
-
-  // Se llama cuando la animación de SALIDA de la escena actual termina
-  const handleExitComplete = useCallback(() => {
-    if (pendingSceneId && !chapterTransition) {
-      setCurrentSceneId(pendingSceneId);
-      setPendingSceneId(null);
-      setTransitioning(false);
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-  }, [pendingSceneId, chapterTransition]);
 
   const handleTransitionComplete = useCallback(() => {
     if (!chapterTransition) return;
     const { nextSceneId } = chapterTransition;
     setChapterTransition(null);
     setCurrentSceneId(nextSceneId);
-    setPendingSceneId(null);
     setTextComplete(false);
     setTransitioning(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -128,7 +112,6 @@ export default function Game() {
 
   const handleRestart = () => {
     setCurrentSceneId("intro");
-    setPendingSceneId(null);
     setEmotions({ ...INITIAL_EMOTIONS });
     setChoicesMade([]);
     setNarrativeFlags({});
@@ -159,14 +142,10 @@ export default function Game() {
 
   const narrative = buildNarrative(currentScene, narrativeFlags);
 
-  // La escena visible es la actual; solo mostramos su contenido
-  // si NO hay un pendingSceneId esperando (evita el flash del texto nuevo)
-  const showContent = !pendingSceneId || !!chapterTransition;
-
   return (
     <div className="min-h-screen bg-background film-grain">
 
-      {/* Transición entre capítulos */}
+      {/* Transición entre capítulos — capa encima de todo */}
       <AnimatePresence>
         {chapterTransition && (
           <ChapterTransition
@@ -194,87 +173,79 @@ export default function Game() {
           </span>
         </div>
 
-        <AnimatePresence
-          mode="wait"
-          onExitComplete={handleExitComplete}
-        >
+        {/* AnimatePresence solo controla el fade entre escenas */}
+        <AnimatePresence mode="wait">
           <motion.div
-            // La key cambia solo cuando currentSceneId cambia,
-            // no cuando pendingSceneId cambia — así la animación de salida
-            // se dispara en el momento correcto
             key={currentSceneId}
             initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: showContent ? 1 : 0, y: showContent ? 0 : -8 }}
+            animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -16 }}
-            transition={{ duration: 0.45 }}
+            transition={{ duration: 0.4 }}
           >
-            {showContent && (
-              <>
-                <SceneHeader scene={currentScene} />
+            <SceneHeader scene={currentScene} />
 
-                <div className="mb-6">
-                  <TypewriterText
-                    key={currentSceneId}
-                    text={narrative}
-                    baseSpeed={baseSpeed}
-                    onComplete={() => setTextComplete(true)}
-                  />
-                </div>
+            <div className="mb-6">
+              <TypewriterText
+                key={currentSceneId}
+                text={narrative}
+                baseSpeed={baseSpeed}
+                onComplete={() => setTextComplete(true)}
+              />
+            </div>
 
-                {textComplete && (
-                  <HistoricalNote note={currentScene.historicalNote} />
-                )}
-
-                {textComplete && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
-                    className="mt-5"
-                  >
-                    <EmotionTracker emotions={emotions} />
-                  </motion.div>
-                )}
-
-                {textComplete && currentScene.choices.length > 0 && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.5 }}
-                    className="mt-8 space-y-3"
-                  >
-                    <div className="flex items-center gap-2 mb-4">
-                      <span className="text-[10px] font-special uppercase tracking-[0.3em] text-primary">
-                        ¿Qué haces?
-                      </span>
-                      <span className="flex-1 h-px bg-border/40" />
-                    </div>
-                    {currentScene.choices.map((choice, i) => (
-                      <ChoiceButton
-                        key={choice.id}
-                        choice={choice}
-                        index={i}
-                        onSelect={handleChoice}
-                        disabled={transitioning || !!pendingSceneId}
-                        locked={isChoiceLocked(choice, emotions)}
-                        lockedMessage={choice.lockedMessage}
-                      />
-                    ))}
-                  </motion.div>
-                )}
-
-                {textComplete && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 0.5 }}
-                    transition={{ delay: 1 }}
-                    className="flex justify-center mt-10 pb-8"
-                  >
-                    <ChevronDown className="w-4 h-4 text-muted-foreground animate-bounce" />
-                  </motion.div>
-                )}
-              </>
+            {textComplete && (
+              <HistoricalNote note={currentScene.historicalNote} />
             )}
+
+            {textComplete && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="mt-5"
+              >
+                <EmotionTracker emotions={emotions} />
+              </motion.div>
+            )}
+
+            {textComplete && currentScene.choices.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+                className="mt-8 space-y-3"
+              >
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="text-[10px] font-special uppercase tracking-[0.3em] text-primary">
+                    ¿Qué haces?
+                  </span>
+                  <span className="flex-1 h-px bg-border/40" />
+                </div>
+                {currentScene.choices.map((choice, i) => (
+                  <ChoiceButton
+                    key={choice.id}
+                    choice={choice}
+                    index={i}
+                    onSelect={handleChoice}
+                    disabled={transitioning}
+                    locked={isChoiceLocked(choice, emotions)}
+                    lockedMessage={choice.lockedMessage}
+                  />
+                ))}
+              </motion.div>
+            )}
+
+            {textComplete && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0.5 }}
+                transition={{ delay: 1 }}
+                className="flex justify-center mt-10 pb-8"
+              >
+                <ChevronDown className="w-4 h-4 text-muted-foreground animate-bounce" />
+              </motion.div>
+            )}
+
           </motion.div>
         </AnimatePresence>
       </div>
