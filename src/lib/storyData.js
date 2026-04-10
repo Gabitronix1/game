@@ -653,20 +653,72 @@ Nadie bebe más. Nadie habla. Hans mira su copa durante un rato muy largo y lueg
         emotionRequires: { conviccion: { min: 20 } },
         lockedMessage: "Abres la boca para decirlo, pero las palabras no salen. Ya no crees en eso.",
         emotionShift: { humanidad: -2, miedo: -2, conviccion: 8 },
-        nextScene: "eastern_front",
+        nextScene: "fritz_letter",
       },
       {
         id: "write_home_paris",
         text: "Excusarte y salir a escribir una carta a casa — necesitas hablar con alguien que no esté aquí.",
         subtext: "Le escribes a Fritz. Le dices que París es hermosa. No le dices lo demás.",
         emotionShift: { humanidad: -2, miedo: 3, conviccion: -3 },
-        nextScene: "eastern_front",
+        nextScene: "fritz_letter",
       },
       {
         id: "ask_werner_east",
         text: "Mirar a Werner y preguntarle en voz baja: \"¿Cuánto sabes de Rusia?\"",
         subtext: "Werner siempre sabe más de lo que conviene saber.",
         emotionShift: { humanidad: -1, miedo: 7, conviccion: -6 },
+        nextScene: "fritz_letter",
+      },
+    ],
+  },
+
+  fritz_letter: {
+    id: "fritz_letter",
+    chapter: "Capítulo IV",
+    title: "Carta desde Berlín",
+    year: "Julio, 1940",
+    location: "París — cuartel improvisado",
+    atmosphere: "intimate",
+    narrative: `La carta llega con tres semanas de retraso, como todas.
+
+El sobre tiene la letra de Fritz — apretada, vertical, idéntica a la de tu madre pero con los bordes más irregulares, como si la mano no hubiera terminado de aprender todavía.
+
+"Karl,
+
+Te escribo desde casa. Mamá dice que no te diga nada que te preocupe, así que no te voy a decir nada que te preocupe.
+
+Los bombardeos aún no han llegado aquí. El vecino Hoffmann dice que no llegarán nunca porque Berlín es demasiado importante. El vecino Hoffmann también decía que la guerra duraría tres semanas.
+
+Yo ya tengo diecisiete. Más alto que tú, aunque mamá dice que no es verdad. Ayudo en la carpintería por las tardes. No soy tan bueno como tú pero tampoco soy tan malo. La tabla de fresno que dejaste a medias en el banco — la terminé. Quedó un poco chueca por un lado pero papá dijo que estaba bien. Tú sabes que papá no dice que algo está bien si no lo está.
+
+¿Cuándo vuelves? Los periódicos dicen que ya casi hemos ganado. Yo no sé qué significa casi.
+
+Escríbeme cuando puedas. O cuando quieras. O cuando no sepas qué otra cosa hacer.
+
+Fritz
+
+P.D. — Los tres gatos siguen aquí. El gris tiene ahora cuatro gatitos. Mamá dice que no podemos quedarnos con ninguno. Ya tenemos tres."
+
+El papel huele a la cocina de tu casa. O quizás es solo que lo imaginas.
+
+Diecisiete años. Cuando tú te fuiste, Fritz tenía dieciséis. Un año más y le llegará la convocatoria.
+
+La doblas con cuidado. La guardas en el mismo bolsillo que las cartas de tu madre.`,
+    historicalNote: "Los jóvenes alemanes nacidos en 1923 fueron llamados a filas masivamente en 1941-1942. Para muchas familias, ver partir al segundo hijo fue incluso más devastador que la primera vez — ya sabían lo que esperaba.",
+    emotionShift: { humanidad: 4, miedo: 3, conviccion: -3 },
+    choices: [
+      {
+        id: "write_fritz_back",
+        text: "Responderle ahora — antes de que olvides lo que quieres decirle.",
+        subtext: "No sabes qué contarle. Le cuentas lo que puedes.",
+        emotionShift: { humanidad: 2, miedo: -2, conviccion: 0 },
+        nextScene: "eastern_front",
+      },
+      {
+        id: "keep_letter_silent",
+        text: "Guardar la carta sin responder todavía — necesitas tiempo para saber qué decir.",
+        subtext: "Llevas semanas sin saber qué decirle a nadie.",
+        emotionShift: { humanidad: -1, miedo: 2, conviccion: -2 },
         nextScene: "eastern_front",
       },
     ],
