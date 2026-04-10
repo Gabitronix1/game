@@ -41,6 +41,11 @@ export const CHOICE_FLAGS = {
   confess_werner:      "confeso_a_werner",
   bury_it_deep:        "enterro_sentimientos",
 
+  // Carta de Fritz
+  // Carta de Fritz
+  write_fritz_back:    "respondio_a_fritz",
+  keep_letter_silent:  "guardo_silencio_fritz",
+
   // Capítulo VI — Stalingrado
   give_civilians:      "dio_comida_civiles",
   keep_for_hans:       "guardo_comida_hans",
@@ -116,6 +121,9 @@ export const SCENE_INJECTIONS = {
 
   // ── Capítulo V ─────────────────────────────
 
+
+  // ── Carta de Fritz ─────────────────────────────────────
+
   eastern_front: [
     {
       flag: "leyo_carta_tren",
@@ -128,6 +136,87 @@ export const SCENE_INJECTIONS = {
     {
       flag: "conocio_hans_tren",
       text: `En el tren a Baviera, Hans hablaba demasiado y reía con facilidad. Entonces no entendías cómo alguien podía hacer eso yendo a la guerra. Ahora lo entiendes — era exactamente lo que necesitabais. `,
+    },
+    {
+      flag: "respondio_a_fritz",
+      text: `Le respondiste a Fritz desde París. Le dijiste que la ciudad era hermosa y que pronto volverías. Las dos cosas eran mentira a medias. Ahora, en el frío ruso, piensas en lo que le prometiste sin prometer nada. `,
+    },
+    {
+      flag: "guardo_silencio_fritz",
+      text: `Nunca le respondiste a Fritz. La carta de él sigue en tu bolsillo junto a las de tu madre. Tres papeles doblados que pesan más que el fusil. `,
+    },
+  ],
+
+  hans_death: [
+    {
+      flag: "prometio_volver",
+      text: `Le prometiste a tu padre que volverías. En la carpintería, con olor a barniz y serrín. Esa noche en Stalingrado, enterrando a Hans en la nieve, la promesa pesa de una forma que no sabías que podía pesar una palabra. `,
+    },
+    {
+      flag: "prometio_no_monstruo",
+      text: `No te convertiste en un monstruo. Eso puedes decírtelo. Pero estás en la nieve de Stalingrado enterrando a tu mejor amigo, y no sabes si eso es suficiente para que valga algo. `,
+    },
+    {
+      flag: "vinculo_hans",
+      text: `Desde el primer día en los cuarteles elegiste cuidar antes que destacar. A Hans, a Werner. Esa decisión te definió. Esta noche, con la bayoneta grabando su nombre en la madera, entiendes que fue la correcta — y que eso no lo hace menos doloroso. `,
+    },
+    {
+      flag: "conocio_hans_tren",
+      text: `Lo conociste en el tren a Baviera. Él hablaba demasiado. Tú no sabías aún que ibas a necesitar exactamente eso. `,
+    },
+    {
+      flag: "acompano_hans_batalla",
+      text: `Después de la iglesia en las Ardenas, cuando Hans vomitaba en el rincón, te sentaste a su lado sin decir nada. Él lo supo. Nunca os lo dijisteis. Pero lo supo. `,
+    },
+    {
+      flag: "respondio_a_fritz",
+      text: `Le escribiste a Fritz desde París. Le dijiste que pronto volverías. Werner graba el nombre de Hans en la madera. Piensas en Fritz, diecisiete años, ayudando en la carpintería. Un año más y le llegará la convocatoria. `,
+    },
+    {
+      flag: "guardo_silencio_fritz",
+      text: `Nunca le respondiste a Fritz. Ahora, grabando el nombre de Hans en la madera, te preguntas qué le dirías si pudieras. Probablemente lo mismo que no le dijiste: que esto no es como lo cuentan. `,
+    },
+  ],
+
+  stalingrad_final: [
+    {
+      flag: "leyo_segunda_carta",
+      text: `\nLlevas la segunda carta de tu madre doblada en el bolsillo interior. Ya la leíste — después de enterrar a Hans, en la nieve. "Vuelve. Por las razones que sean. Vuelve." Das el siguiente paso pensando en eso.`,
+    },
+    {
+      flag: "confeso_a_werner",
+      text: `\nLe dijiste a Werner que tenía razón — y que no sabías cómo vivir con eso. Él no te dio una respuesta. Solo asintió. A veces eso es lo único que existe.`,
+    },
+    {
+      flag: "devolvio_foto",
+      text: `\nEl sargento francés de las Ardenas. Le hiciste un gesto para que guardara la foto. Una mujer joven, un niño de tres años. Te preguntas si llegó a verlos.`,
+    },
+    {
+      flag: "respondio_a_fritz",
+      text: `\nFritz. Le prometiste en aquella carta que pronto volverías. La escribiste en París, cuando aún creías en el "pronto". Das un paso. Luego otro. Por Fritz.`,
+    },
+    {
+      flag: "guardo_silencio_fritz",
+      text: `\nNunca le respondiste a Fritz. Eso te pesa de una forma diferente a todo lo demás. Darás el siguiente paso para poder escribirle algún día.`,
+    },
+  ],
+
+  ending_supervivencia: [
+    {
+      flag: "prometio_volver",
+      text: `\nLe prometiste a tu padre que volverías. Doce años después. Él no está en el andén — lleva cinco años muerto. Pero volviste. La promesa se cumplió de una forma que ninguno de los dos imaginó.`,
+    },
+    {
+      flag: "escribe_diario",
+      text: `\nEl cuaderno que empezaste en el tren a Baviera no sobrevivió a Stalingrado. Pero en el campo de trabajo soviético empezaste otro. Y otro. Escribir fue, durante doce años, la única forma de seguir siendo Karl Müller y no solo un número.`,
+    },
+    {
+      flag: "respondio_a_fritz",
+      text: `\nLe prometiste a Fritz en aquella carta desde París que volverías pronto. Doce años después, Fritz está en el andén. No es lo que prometiste. Pero es la promesa cumplida.`,
+    },
+    {
+      flag: "guardo_silencio_fritz",
+      text: `\nNunca le respondiste a su carta. Él te esperó igual. Eso, descubres en el andén, es lo que significa tener un hermano.`,
     },
   ],
 
@@ -306,13 +395,13 @@ export function buildNarrative(scene, narrativeFlags) {
     .map(({ text }) => text)
     .join("");
 
-  if (!injections) return scene.narrative;
-
-  // Si la escena tiene marcador de posición, inyectar ahí
+  // Siempre reemplazar {{inject}} — con texto o con string vacío
+  // Nunca dejar el marcador visible
   if (scene.narrative.includes("{{inject}}")) {
     return scene.narrative.replace("{{inject}}", injections);
   }
 
-  // Fallback: añadir al final
-  return scene.narrative + injections;
+  // Sin marcador: añadir al final solo si hay texto
+  if (injections) return scene.narrative + injections;
+  return scene.narrative;
 }
