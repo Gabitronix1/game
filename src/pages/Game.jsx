@@ -13,22 +13,32 @@ import EmotionTracker from "../components/game/EmotionTracker";
 import EndingScreen from "../components/game/EndingScreen";
 import ChapterTransition from "../components/game/ChapterTransition";
 import PauseMenu from "../components/game/PauseMenu";
+import SoundToggle from "../components/game/SoundToggle";
 import { ChevronDown, Menu } from "lucide-react";
+import { useAmbientSound } from "../hooks/useAmbientSound";
+import { useTypewriterSound } from "../hooks/useTypewriterSound";
+import { useVignette } from "../hooks/useVignette";
+
+const HIGH_IMPACT_ATMOSPHERES = new Set(["horror", "violence", "moral_dilemma", "chaos"]);
 
 export default function Game() {
   const navigate = useNavigate();
   const location = useLocation();
 
   const [currentSceneId, setCurrentSceneId] = useState("intro");
-  const [emotions, setEmotions] = useState({ ...INITIAL_EMOTIONS });
-  const [choicesMade, setChoicesMade] = useState([]);
+  const [emotions, setEmotions]             = useState({ ...INITIAL_EMOTIONS });
+  const [choicesMade, setChoicesMade]       = useState([]);
   const [narrativeFlags, setNarrativeFlags] = useState({});
-  const [textComplete, setTextComplete] = useState(false);
-  const [transitioning, setTransitioning] = useState(false);
+  const [textComplete, setTextComplete]     = useState(false);
+  const [transitioning, setTransitioning]   = useState(false);
   const [chapterTransition, setChapterTransition] = useState(null);
-  const [isPaused, setIsPaused] = useState(false);
+  const [isPaused, setIsPaused]             = useState(false);
 
   const currentChapterRef = useRef(scenes["intro"]?.chapter);
+
+  const sound      = useAmbientSound();
+  const typeSound  = useTypewriterSound();
+  const vignette   = useVignette();
 
   // Cargar partida guardada si viene del Landing con loadSave: true
   useEffect(() => {
@@ -57,6 +67,18 @@ export default function Game() {
   }, [chapterTransition]);
 
   const currentScene = scenes[currentSceneId];
+
+  // Actualizar atmósfera de audio y visual cuando cambia la escena
+  useEffect(() => {
+    if (!currentScene) return;
+    sound.setAtmosphere(currentScene.atmosphere);
+    vignette.updateAtmosphere(currentScene.atmosphere);
+  }, [currentSceneId]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Actualizar vignette cuando cambian las emociones
+  useEffect(() => {
+    vignette.updateEmotions(emotions);
+  }, [emotions]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const ATMOSPHERE_SPEED = {
     horror:        6,
@@ -101,7 +123,11 @@ export default function Game() {
       applyEmotionShift(currentScene.emotionShift);
       applyEmotionShift(choice.emotionShift);
 
-      const nextScene = scenes[choice.nextScene];
+      if (HIGH_IMPACT_ATMOSPHERES.has(currentScene.atmosphere)) {
+        vignette.triggerImpactFlash();
+      }
+
+      const nextScene   = scenes[choice.nextScene];
       const nextChapter = nextScene?.chapter;
       const isChapterChange =
         nextChapter &&
@@ -112,9 +138,9 @@ export default function Game() {
         if (isChapterChange) {
           currentChapterRef.current = nextChapter;
           setChapterTransition({
-            chapter: nextChapter,
-            year: nextScene.year,
-            location: nextScene.location,
+            chapter:     nextChapter,
+            year:        nextScene.year,
+            location:    nextScene.location,
             nextSceneId: choice.nextScene,
           });
           setTransitioning(false);
@@ -126,7 +152,7 @@ export default function Game() {
         }
       }, 500);
     },
-    [currentScene, applyEmotionShift, transitioning, isPaused]
+    [currentScene, applyEmotionShift, transitioning, isPaused, vignette]
   );
 
   const handleTransitionComplete = useCallback(() => {
@@ -152,8 +178,20 @@ export default function Game() {
   }, []);
 
   const handleGoHome = useCallback(() => {
+    sound.disable();
     navigate("/");
-  }, [navigate]);
+  }, [navigate, sound]);
+
+  // Activar todos los sistemas de sonido con un solo click
+  const handleSoundEnable = useCallback(() => {
+    sound.enable();
+    typeSound.enable();
+  }, [sound, typeSound]);
+
+  const handleSoundDisable = useCallback(() => {
+    sound.disable();
+    typeSound.disable();
+  }, [sound, typeSound]);
 
   const gameState = {
     currentSceneId,
@@ -174,6 +212,7 @@ export default function Game() {
     if (currentScene.endingType) {
       unlockEnding(currentScene.endingType);
     }
+    sound.disable();
     return (
       <EndingScreen
         scene={currentScene}
@@ -220,9 +259,15 @@ export default function Game() {
             <Menu className="w-3.5 h-3.5" />
             Menú
           </button>
-          <span className="text-[10px] font-special uppercase tracking-widest text-muted-foreground">
-            Decisiones: {choicesMade.length}
-          </span>
+          <div className="flex items-center gap-4">
+            <SoundToggle
+              onEnable={handleSoundEnable}
+              onDisable={handleSoundDisable}
+            />
+            <span className="text-[10px] font-special uppercase tracking-widest text-muted-foreground">
+              Decisiones: {choicesMade.length}
+            </span>
+          </div>
         </div>
 
         <AnimatePresence mode="wait">
@@ -241,6 +286,8 @@ export default function Game() {
                 text={narrative}
                 baseSpeed={baseSpeed}
                 onComplete={() => setTextComplete(true)}
+                onTick={(charType) => typeSound.tick(charType)}
+                onCarriageReturn={() => typeSound.carriageReturn()}
               />
             </div>
 
