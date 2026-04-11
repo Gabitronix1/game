@@ -72,6 +72,7 @@ export default function Game() {
   useEffect(() => {
     if (!currentScene) return;
     sound.setAtmosphere(currentScene.atmosphere);
+    typeSound.setAtmosphere(currentScene.atmosphere);
     vignette.updateAtmosphere(currentScene.atmosphere);
   }, [currentSceneId]); // eslint-disable-line react-hooks/exhaustive-deps
 
